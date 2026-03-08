@@ -14,12 +14,17 @@ _db = None
 #     _db = firestore.client()
 
 def initialize_firebase():
+    global _db
+
     if not firebase_admin._apps:
         firebase_json = os.environ.get("FIREBASE_CREDENTIALS")
         cred_dict = json.loads(firebase_json)
         cred = credentials.Certificate(cred_dict)
+
         firebase_admin.initialize_app(cred)
 
+    _db = firestore.client()
+    
 def get_db() -> firestore.Client:
     global _db
     if _db is None:
