@@ -138,7 +138,7 @@ export default function Classes() {
 
       {/* Create Class Modal */}
       <Modal isOpen={showModal} onClose={() => setShowModal(false)} title="Create New Class">
-        <form onSubmit={handleCreate} className="space-y-4">
+        <form onSubmit={handleCreate} className="space-y-4 py-4 px-4">
           {[
             { label: 'Class Name', key: 'name', placeholder: 'Mathematics 10A' },
             { label: 'Subject', key: 'subject', placeholder: 'Mathematics' },

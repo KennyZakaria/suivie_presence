@@ -140,7 +140,7 @@ export default function Teachers() {
 
       {/* Add Teacher Modal */}
       <Modal isOpen={showModal} onClose={() => setShowModal(false)} title="Add New Teacher">
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 py-4 px-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
             <input

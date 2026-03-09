@@ -161,7 +161,7 @@ export default function Students() {
       </div>
 
       <Modal isOpen={showModal} onClose={() => setShowModal(false)} title="Add New Student">
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 py-4 px-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
             <input type="text" required value={form.full_name}
