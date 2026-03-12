@@ -24,17 +24,17 @@ export default function StudentProfile() {
       getStudentSummary(id).then(setSummary),
       getStudentAttendance(id).then(d => setAttendance(d.slice(0, 20))),
       getStudentReviews(id).then(setReviews),
-    ]).catch(() => toast.error('Failed to load student data'))
+    ]).catch(() => toast.error('Échec du chargement des données de l\'étudiant'))
       .finally(() => setLoading(false));
   }, [id]);
 
   if (loading) return <div className="flex justify-center h-64 items-center"><LoadingSpinner size="lg" /></div>;
-  if (!student) return <div className="text-center py-16 text-gray-400">Student not found</div>;
+  if (!student) return <div className="text-center py-16 text-gray-400">Étudiant non trouvé</div>;
 
   const pieData = summary ? [
-    { name: 'Present', value: summary.present },
+    { name: 'Présent', value: summary.present },
     { name: 'Absent', value: summary.absent },
-    { name: 'Late', value: summary.late },
+    { name: 'En retard', value: summary.late },
   ].filter(d => d.value > 0) : [];
 
   const levelColors = { 1: 'bg-yellow-100 text-yellow-700', 2: 'bg-orange-100 text-orange-700', 3: 'bg-red-100 text-red-700' };
@@ -47,7 +47,7 @@ export default function StudentProfile() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900">Student Profile</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Profil de l'étudiant</h1>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
@@ -61,14 +61,14 @@ export default function StudentProfile() {
           {student.phone && <p className="text-sm text-gray-500 mt-1">{student.phone}</p>}
           <div className="mt-3">
             <span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${student.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600'}`}>
-              {student.is_active ? 'Active' : 'Inactive'}
+              {student.is_active ? 'Actif' : 'Inactif'}
             </span>
           </div>
           {summary && (
             <div className="mt-4 w-full border-t pt-4 grid grid-cols-3 gap-2 text-center">
               <div>
                 <p className="text-xl font-bold text-green-600">{summary.present}</p>
-                <p className="text-xs text-gray-500">Present</p>
+                <p className="text-xs text-gray-500">Présent</p>
               </div>
               <div>
                 <p className="text-xl font-bold text-red-500">{summary.absent}</p>
@@ -76,7 +76,7 @@ export default function StudentProfile() {
               </div>
               <div>
                 <p className="text-xl font-bold text-orange-500">{summary.late}</p>
-                <p className="text-xs text-gray-500">Late</p>
+                <p className="text-xs text-gray-500">En retard</p>
               </div>
             </div>
           )}
@@ -84,12 +84,12 @@ export default function StudentProfile() {
 
         {/* Pie Chart */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3 className="font-semibold text-gray-900 mb-2">Attendance Breakdown</h3>
+          <h3 className="font-semibold text-gray-900 mb-2">Répartition de la présence</h3>
           {summary && summary.total > 0 ? (
             <>
               <div className="text-center mb-2">
                 <span className="text-3xl font-bold text-indigo-600">{summary.present_percentage}%</span>
-                <p className="text-xs text-gray-500">Overall Attendance</p>
+                <p className="text-xs text-gray-500">Présence globale</p>
               </div>
               <ResponsiveContainer width="100%" height={160}>
                 <PieChart>
@@ -104,25 +104,25 @@ export default function StudentProfile() {
               </ResponsiveContainer>
             </>
           ) : (
-            <p className="text-gray-400 text-sm text-center mt-10">No attendance data yet</p>
+            <p className="text-gray-400 text-sm text-center mt-10">Aucune donnée de présence pour le moment</p>
           )}
         </div>
 
         {/* Reviews Summary */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3 className="font-semibold text-gray-900 mb-3">Disciplinary Reviews ({reviews.length})</h3>
+          <h3 className="font-semibold text-gray-900 mb-3">Avis disciplinaires ({reviews.length})</h3>
           {reviews.length === 0 ? (
-            <p className="text-gray-400 text-sm text-center mt-10">No reviews</p>
+            <p className="text-gray-400 text-sm text-center mt-10">Aucun avis</p>
           ) : (
             <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
               {reviews.map(r => (
                 <div key={r.id} className="border border-gray-100 rounded-lg p-3">
                   <div className="flex items-center justify-between mb-1">
-                    <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${levelColors[r.level]}`}>
-                      Level {r.level}
+                      <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${levelColors[r.level]}`}>
+                      Niveau {r.level}
                     </span>
                     {r.is_resolved && (
-                      <span className="text-xs text-green-600 font-medium">Resolved</span>
+                      <span className="text-xs text-green-600 font-medium">Résolu</span>
                     )}
                   </div>
                   <p className="text-sm font-medium text-gray-800">{r.title}</p>
@@ -136,15 +136,15 @@ export default function StudentProfile() {
 
       {/* Attendance History */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <h3 className="font-semibold text-gray-900 mb-4">Recent Attendance</h3>
+        <h3 className="font-semibold text-gray-900 mb-4">Présence récente</h3>
         {attendance.length === 0 ? (
-          <p className="text-gray-400 text-sm text-center py-8">No attendance records</p>
+          <p className="text-gray-400 text-sm text-center py-8">Aucun enregistrement de présence</p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="bg-gray-50">
                 <tr>
-                  {['Date', 'Class', 'Status', 'Notes'].map(h => (
+                  {['Date', 'Classe', 'Statut', 'Notes'].map(h => (
                     <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">{h}</th>
                   ))}
                 </tr>

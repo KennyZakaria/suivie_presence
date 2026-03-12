@@ -13,7 +13,7 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email || !password) {
-      toast.error('Please enter email and password');
+      toast.error('Veuillez saisir votre email et mot de passe');
       return;
     }
     setLoading(true);
@@ -21,7 +21,7 @@ export default function Login() {
       await login(email, password);
       navigate('/dashboard');
     } catch (err) {
-      toast.error(err.response?.data?.detail || err.message || 'Login failed');
+      toast.error(err.response?.data?.detail || err.message || 'Échec de la connexion');
     } finally {
       setLoading(false);
     }
@@ -40,27 +40,27 @@ export default function Login() {
                 d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
             </svg>
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">Kacem school</h1>
-          <p className="text-gray-500 text-sm mt-1">Admin Dashboard</p>
+          <h1 className="text-2xl font-bold text-gray-900">École Kacem</h1>
+          <p className="text-gray-500 text-sm mt-1">Tableau de bord Admin</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1.5">
-              Email Address
+              Adresse email
             </label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="admin@school.edu"
+              placeholder="admin@ecole.fr"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition text-sm"
               required
             />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1.5">
-              Password
+              Mot de passe
             </label>
             <input
               type="password"
@@ -82,9 +82,9 @@ export default function Login() {
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                 </svg>
-                Signing in...
+                Connexion en cours...
               </>
-            ) : 'Sign In'}
+            ) : 'Se connecter'}
           </button>
         </form>
       </div>

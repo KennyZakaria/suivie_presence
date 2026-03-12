@@ -21,7 +21,7 @@ export default function Teachers() {
       const data = await getTeachers();
       setTeachers(data);
     } catch {
-      toast.error('Failed to load teachers');
+      toast.error('Échec du chargement des enseignants');
     } finally {
       setLoading(false);
     }
@@ -29,7 +29,7 @@ export default function Teachers() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.full_name || !form.email) return toast.error('Name and email are required');
+    if (!form.full_name || !form.email) return toast.error('Le nom et l\'email sont obligatoires');
     setSubmitting(true);
     try {
       const result = await createTeacher(form);
@@ -38,7 +38,7 @@ export default function Teachers() {
       setForm({ full_name: '', email: '', phone: '' });
       setShowModal(false);
     } catch (err) {
-      toast.error(err.response?.data?.detail || 'Failed to create teacher');
+      toast.error(err.response?.data?.detail || 'Échec de la création de l\'enseignant');
     } finally {
       setSubmitting(false);
     }
@@ -48,9 +48,9 @@ export default function Teachers() {
     try {
       await deleteUser(id);
       setTeachers(prev => prev.filter(t => t.id !== id));
-      toast.success('Teacher deleted');
+      toast.success('Enseignant supprimé');
     } catch {
-      toast.error('Failed to delete teacher');
+      toast.error('Échec de la suppression de l\'enseignant');
     }
     setConfirm(null);
   };
@@ -60,7 +60,7 @@ export default function Teachers() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Teachers</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Enseignants</h1>
         <button
           onClick={() => setShowModal(true)}
           className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors"
@@ -68,7 +68,7 @@ export default function Teachers() {
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
           </svg>
-          Add Teacher
+          Ajouter un enseignant
         </button>
       </div>
 
@@ -79,9 +79,9 @@ export default function Teachers() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           <div className="flex-1 text-sm text-green-800">
-            <p className="font-semibold">Teacher account created. Share these credentials:</p>
-            <p>Email: <span className="font-mono">{createdCreds.email}</span></p>
-            <p>Temp Password: <span className="font-mono font-semibold">{createdCreds.password}</span></p>
+            <p className="font-semibold">Compte enseignant créé. Partagez ces identifiants :</p>
+            <p>Email : <span className="font-mono">{createdCreds.email}</span></p>
+            <p>Mot de passe temporaire : <span className="font-mono font-semibold">{createdCreds.password}</span></p>
           </div>
           <button onClick={() => setCreatedCreds(null)} className="text-green-500 hover:text-green-700">✕</button>
         </div>
@@ -93,13 +93,13 @@ export default function Teachers() {
             <svg className="w-10 h-10 mx-auto mb-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
-            <p>No teachers yet. Add one to get started.</p>
+            <p>Aucun enseignant pour le moment. Ajoutez-en un pour commencer.</p>
           </div>
         ) : (
           <table className="w-full text-sm">
             <thead className="bg-gray-50">
               <tr>
-                {['Name', 'Email', 'Phone', 'Classes', 'Status', ''].map(h => (
+                {['Nom', 'Email', 'Téléphone', 'Classes', 'Statut', ''].map(h => (
                   <th key={h} className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">{h}</th>
                 ))}
               </tr>
@@ -120,7 +120,7 @@ export default function Teachers() {
                   <td className="px-5 py-4 text-gray-500">{t.class_ids?.length || 0}</td>
                   <td className="px-5 py-4">
                     <span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${t.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600'}`}>
-                      {t.is_active ? 'Active' : 'Inactive'}
+                      {t.is_active ? 'Actif' : 'Inactif'}
                     </span>
                   </td>
                   <td className="px-5 py-4">
@@ -128,7 +128,7 @@ export default function Teachers() {
                       onClick={() => setConfirm({ id: t.id, name: t.full_name })}
                       className="text-red-500 hover:text-red-700 text-xs font-medium"
                     >
-                      Delete
+                      Supprimer
                     </button>
                   </td>
                 </tr>
@@ -139,16 +139,16 @@ export default function Teachers() {
       </div>
 
       {/* Add Teacher Modal */}
-      <Modal isOpen={showModal} onClose={() => setShowModal(false)} title="Add New Teacher">
+      <Modal isOpen={showModal} onClose={() => setShowModal(false)} title="Ajouter un nouvel enseignant">
         <form onSubmit={handleSubmit} className="space-y-4 py-4 px-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Nom complet *</label>
             <input
               type="text" required
               value={form.full_name}
               onChange={e => setForm(p => ({ ...p, full_name: e.target.value }))}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
-              placeholder="John Doe"
+              placeholder="Jean Dupont"
             />
           </div>
           <div>
@@ -158,28 +158,28 @@ export default function Teachers() {
               value={form.email}
               onChange={e => setForm(p => ({ ...p, email: e.target.value }))}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
-              placeholder="teacher@school.edu"
+              placeholder="enseignant@ecole.fr"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Téléphone</label>
             <input
               type="tel"
               value={form.phone}
               onChange={e => setForm(p => ({ ...p, phone: e.target.value }))}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
-              placeholder="+1 234 567 8900"
+              placeholder="+212 123 456 789"
             />
           </div>
-          <p className="text-xs text-gray-400">A temporary password will be auto-generated and shown after creation.</p>
+          <p className="text-xs text-gray-400">Un mot de passe temporaire sera généré automatiquement et affiché après la création.</p>
           <div className="flex gap-3 pt-2">
             <button type="button" onClick={() => setShowModal(false)}
               className="flex-1 px-4 py-2 text-sm border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
-              Cancel
+              Annuler
             </button>
             <button type="submit" disabled={submitting}
               className="flex-1 px-4 py-2 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50">
-              {submitting ? 'Creating...' : 'Create Teacher'}
+              {submitting ? 'Création...' : 'Créer l\'enseignant'}
             </button>
           </div>
         </form>
@@ -189,8 +189,8 @@ export default function Teachers() {
         isOpen={!!confirm}
         onClose={() => setConfirm(null)}
         onConfirm={() => handleDelete(confirm?.id)}
-        title="Delete Teacher"
-        message={`Are you sure you want to delete ${confirm?.name}? This cannot be undone.`}
+        title="Supprimer l'enseignant"
+        message={`Êtes-vous sûr de vouloir supprimer ${confirm?.name} ? Cette action est irréversible.`}
       />
     </div>
   );

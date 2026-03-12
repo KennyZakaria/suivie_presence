@@ -24,7 +24,7 @@ export default function ClassDetail() {
         setCls(data);
         setStudents(data.students || []);
       })
-      .catch(() => toast.error('Failed to load class'))
+      .catch(() => toast.error('Échec du chargement de la classe'))
       .finally(() => setLoading(false));
   }, [id]);
 
@@ -34,7 +34,7 @@ export default function ClassDetail() {
       const data = await getClassAttendance(id, dateFilter);
       setAttendance(data);
     } catch {
-      toast.error('Failed to load attendance');
+      toast.error('Échec du chargement de la présence');
     } finally {
       setLoadingAtt(false);
     }
@@ -46,13 +46,13 @@ export default function ClassDetail() {
     try {
       await removeStudentFromClass(id, sid);
       setStudents(prev => prev.filter(s => s.id !== sid));
-      toast.success('Student removed from class');
-    } catch { toast.error('Failed to remove student'); }
+      toast.success('Étudiant retiré de la classe');
+    } catch { toast.error('Échec du retrait de l\'étudiant'); }
     setConfirmRemove(null);
   };
 
   if (loading) return <div className="flex justify-center h-64 items-center"><LoadingSpinner size="lg" /></div>;
-  if (!cls) return <div className="text-center py-16 text-gray-400">Class not found</div>;
+  if (!cls) return <div className="text-center py-16 text-gray-400">Classe non trouvée</div>;
 
   const statusCount = (status) => attendance.filter(a => a.status === status).length;
 
@@ -73,9 +73,9 @@ export default function ClassDetail() {
       {/* Info row */}
       <div className="grid grid-cols-3 gap-4">
         {[
-          { label: 'Students', value: cls.student_ids?.length || 0 },
-          { label: 'Teacher', value: cls.teacher_id || 'Unassigned' },
-          { label: 'Status', value: cls.is_active ? 'Active' : 'Inactive' },
+          { label: 'Étudiants', value: cls.student_ids?.length || 0 },
+          { label: 'Enseignant', value: cls.teacher_id || 'Non assigné' },
+          { label: 'Statut', value: cls.is_active ? 'Actif' : 'Inactif' },
         ].map(item => (
           <div key={item.label} className="bg-white rounded-xl border border-gray-100 shadow-sm p-4 text-center">
             <p className="text-lg font-bold text-gray-900 truncate">{item.value}</p>
@@ -91,7 +91,7 @@ export default function ClassDetail() {
             className={`px-5 py-3 text-sm font-medium capitalize transition-colors ${
               tab === t ? 'border-b-2 border-indigo-600 text-indigo-600' : 'text-gray-500 hover:text-gray-700'
             }`}>
-            {t === 'students' ? `Students (${students.length})` : 'Attendance History'}
+            {t === 'students' ? `Étudiants (${students.length})` : 'Historique de présence'}
           </button>
         ))}
       </div>
@@ -99,12 +99,12 @@ export default function ClassDetail() {
       {tab === 'students' && (
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
           {students.length === 0 ? (
-            <p className="text-center py-12 text-gray-400 text-sm">No students assigned to this class</p>
+            <p className="text-center py-12 text-gray-400 text-sm">Aucun étudiant assigné à cette classe</p>
           ) : (
             <table className="w-full text-sm">
               <thead className="bg-gray-50">
                 <tr>
-                  {['Name', 'Email', ''].map(h => (
+                  {['Nom', 'Email', ''].map(h => (
                     <th key={h} className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase">{h}</th>
                   ))}
                 </tr>
@@ -123,7 +123,7 @@ export default function ClassDetail() {
                     <td className="px-5 py-3 text-gray-500">{s.email}</td>
                     <td className="px-5 py-3">
                       <button onClick={() => setConfirmRemove({ id: s.id, name: s.full_name })}
-                        className="text-red-500 hover:text-red-700 text-xs font-medium">Remove</button>
+                        className="text-red-500 hover:text-red-700 text-xs font-medium">Retirer</button>
                     </td>
                   </tr>
                 ))}
@@ -136,16 +136,16 @@ export default function ClassDetail() {
       {tab === 'attendance' && (
         <div className="space-y-4">
           <div className="flex items-center gap-3">
-            <label className="text-sm font-medium text-gray-700">Date:</label>
+            <label className="text-sm font-medium text-gray-700">Date :</label>
             <input type="date" value={dateFilter} onChange={e => setDateFilter(e.target.value)}
               className="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" />
           </div>
           {attendance.length > 0 && (
             <div className="grid grid-cols-3 gap-4">
               {[
-                { label: 'Present', count: statusCount('present'), color: 'text-green-600' },
+                { label: 'Présent', count: statusCount('present'), color: 'text-green-600' },
                 { label: 'Absent', count: statusCount('absent'), color: 'text-red-500' },
-                { label: 'Late', count: statusCount('late'), color: 'text-orange-500' },
+                { label: 'En retard', count: statusCount('late'), color: 'text-orange-500' },
               ].map(s => (
                 <div key={s.label} className="bg-white border border-gray-100 rounded-xl p-4 text-center shadow-sm">
                   <p className={`text-2xl font-bold ${s.color}`}>{s.count}</p>
@@ -158,12 +158,12 @@ export default function ClassDetail() {
             {loadingAtt ? (
               <div className="flex justify-center py-12"><LoadingSpinner /></div>
             ) : attendance.length === 0 ? (
-              <p className="text-center py-12 text-gray-400 text-sm">No attendance records for {dateFilter}</p>
+              <p className="text-center py-12 text-gray-400 text-sm">Aucun enregistrement de présence pour le {dateFilter}</p>
             ) : (
               <table className="w-full text-sm">
                 <thead className="bg-gray-50">
                   <tr>
-                    {['Student ID', 'Status', 'Notes'].map(h => (
+                    {['ID Étudiant', 'Statut', 'Notes'].map(h => (
                       <th key={h} className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase">{h}</th>
                     ))}
                   </tr>
@@ -186,8 +186,8 @@ export default function ClassDetail() {
       <ConfirmDialog
         isOpen={!!confirmRemove} onClose={() => setConfirmRemove(null)}
         onConfirm={() => handleRemoveStudent(confirmRemove?.id)}
-        title="Remove Student"
-        message={`Remove ${confirmRemove?.name} from this class?`}
+        title="Retirer l'étudiant"
+        message={`Retirer ${confirmRemove?.name} de cette classe ?`}
       />
     </div>
   );

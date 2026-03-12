@@ -25,24 +25,24 @@ export default function Classes() {
       getClasses().then(setClasses),
       getTeachers().then(setTeachers),
       getStudents().then(setStudents),
-    ]).catch(() => toast.error('Failed to load data'))
+    ]).catch(() => toast.error('Échec du chargement des données'))
       .finally(() => setLoading(false));
   }, []);
 
-  const getTeacherName = (tid) => teachers.find(t => t.id === tid)?.full_name || 'Unassigned';
+  const getTeacherName = (tid) => teachers.find(t => t.id === tid)?.full_name || 'Non assigné';
 
   const handleCreate = async (e) => {
     e.preventDefault();
-    if (!form.name || !form.subject || !form.grade) return toast.error('All fields are required');
+    if (!form.name || !form.subject || !form.grade) return toast.error('Tous les champs sont obligatoires');
     setSubmitting(true);
     try {
       const cls = await createClass(form);
       setClasses(prev => [...prev, cls]);
       setForm({ name: '', subject: '', grade: '' });
       setShowModal(false);
-      toast.success('Class created');
+      toast.success('Classe créée');
     } catch (err) {
-      toast.error(err.response?.data?.detail || 'Failed to create class');
+      toast.error(err.response?.data?.detail || 'Échec de la création de la classe');
     } finally {
       setSubmitting(false);
     }
@@ -58,9 +58,9 @@ export default function Classes() {
       setShowAssignModal(null);
       setAssignTeacherId('');
       setAssignStudentIds([]);
-      toast.success('Assignments saved');
+      toast.success('Affectations enregistrées');
     } catch {
-      toast.error('Failed to save assignments');
+      toast.error('Échec de l\'enregistrement des affectations');
     } finally {
       setSubmitting(false);
     }
@@ -87,7 +87,7 @@ export default function Classes() {
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
           </svg>
-          New Class
+          Nouvelle classe
         </button>
       </div>
 
@@ -96,7 +96,7 @@ export default function Classes() {
           <svg className="w-10 h-10 mx-auto mb-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
           </svg>
-          <p>No classes yet. Create one to get started.</p>
+          <p>Aucune classe pour le moment. Créez-en une pour commencer.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
@@ -105,10 +105,10 @@ export default function Classes() {
               <div className="flex items-start justify-between">
                 <div>
                   <h3 className="font-semibold text-gray-900">{cls.name}</h3>
-                  <p className="text-sm text-gray-500">{cls.subject} · Grade {cls.grade}</p>
+                  <p className="text-sm text-gray-500">{cls.subject} · Classe {cls.grade}</p>
                 </div>
                 <span className="text-xs bg-indigo-50 text-indigo-700 font-medium px-2 py-1 rounded-lg">
-                  {cls.student_ids?.length || 0} students
+                  {cls.student_ids?.length || 0} étudiants
                 </span>
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-500">
@@ -122,13 +122,13 @@ export default function Classes() {
                   onClick={() => { setShowAssignModal(cls.id); setAssignTeacherId(cls.teacher_id || ''); setAssignStudentIds([]); }}
                   className="flex-1 text-xs py-1.5 border border-indigo-200 text-indigo-600 rounded-lg hover:bg-indigo-50"
                 >
-                  Assign
+                  Assigner
                 </button>
                 <Link
                   to={`/classes/${cls.id}`}
                   className="flex-1 text-xs py-1.5 text-center bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
                 >
-                  View
+                  Voir
                 </Link>
               </div>
             </div>
@@ -137,12 +137,12 @@ export default function Classes() {
       )}
 
       {/* Create Class Modal */}
-      <Modal isOpen={showModal} onClose={() => setShowModal(false)} title="Create New Class">
+      <Modal isOpen={showModal} onClose={() => setShowModal(false)} title="Créer une nouvelle classe">
         <form onSubmit={handleCreate} className="space-y-4 py-4 px-4">
           {[
-            { label: 'Class Name', key: 'name', placeholder: 'Mathematics 10A' },
-            { label: 'Subject', key: 'subject', placeholder: 'Mathematics' },
-            { label: 'Grade', key: 'grade', placeholder: '10' },
+            { label: 'Nom de la classe', key: 'name', placeholder: 'Mathématiques 10A' },
+            { label: 'Matière', key: 'subject', placeholder: 'Mathématiques' },
+            { label: 'Niveau', key: 'grade', placeholder: '10' },
           ].map(f => (
             <div key={f.key}>
               <label className="block text-sm font-medium text-gray-700 mb-1">{f.label} *</label>
@@ -154,28 +154,28 @@ export default function Classes() {
           ))}
           <div className="flex gap-3 pt-2">
             <button type="button" onClick={() => setShowModal(false)}
-              className="flex-1 px-4 py-2 text-sm border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">Cancel</button>
+              className="flex-1 px-4 py-2 text-sm border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">Annuler</button>
             <button type="submit" disabled={submitting}
               className="flex-1 px-4 py-2 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50">
-              {submitting ? 'Creating...' : 'Create'}
+              {submitting ? 'Création...' : 'Créer'}
             </button>
           </div>
         </form>
       </Modal>
 
       {/* Assign Modal */}
-      <Modal isOpen={!!showAssignModal} onClose={() => setShowAssignModal(null)} title={`Assign — ${selectedClass?.name}`}>
+      <Modal isOpen={!!showAssignModal} onClose={() => setShowAssignModal(null)} title={`Assigner — ${selectedClass?.name}`}>
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Teacher</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Enseignant</label>
             <select value={assignTeacherId} onChange={e => setAssignTeacherId(e.target.value)}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
-              <option value="">— Select teacher —</option>
+              <option value="">— Sélectionner un enseignant —</option>
               {teachers.map(t => <option key={t.id} value={t.id}>{t.full_name}</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Students (click to select)</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Étudiants (cliquer pour sélectionner)</label>
             <div className="max-h-48 overflow-y-auto border border-gray-200 rounded-lg divide-y">
               {students.map(s => {
                 const selected = assignStudentIds.includes(s.id);
@@ -185,7 +185,7 @@ export default function Classes() {
                     className={`w-full text-left px-3 py-2 text-sm flex items-center gap-2 hover:bg-gray-50 ${selected ? 'bg-indigo-50' : ''}`}>
                     <input type="checkbox" readOnly checked={selected || already} className="rounded" />
                     <span className={already ? 'text-gray-400' : 'text-gray-800'}>{s.full_name}</span>
-                    {already && <span className="text-xs text-gray-400">(already assigned)</span>}
+                    {already && <span className="text-xs text-gray-400">(déjà assigné)</span>}
                   </button>
                 );
               })}
@@ -193,10 +193,10 @@ export default function Classes() {
           </div>
           <div className="flex gap-3">
             <button onClick={() => setShowAssignModal(null)}
-              className="flex-1 px-4 py-2 text-sm border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">Cancel</button>
+              className="flex-1 px-4 py-2 text-sm border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">Annuler</button>
             <button onClick={() => handleAssign(showAssignModal)} disabled={submitting}
               className="flex-1 px-4 py-2 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50">
-              {submitting ? 'Saving...' : 'Save Assignments'}
+              {submitting ? 'Enregistrement...' : 'Enregistrer les affectations'}
             </button>
           </div>
         </div>

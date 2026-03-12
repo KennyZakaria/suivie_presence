@@ -23,7 +23,7 @@ export default function Students() {
   }, []);
 
   const fetchStudents = async () => {
-    try { setStudents(await getStudents()); } catch { toast.error('Failed to load students'); }
+    try { setStudents(await getStudents()); } catch { toast.error('Échec du chargement des étudiants'); }
   };
 
   const fetchClasses = async () => {
@@ -35,7 +35,7 @@ export default function Students() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.full_name || !form.email) return toast.error('Name and email are required');
+    if (!form.full_name || !form.email) return toast.error('Le nom et l\'email sont obligatoires');
     setSubmitting(true);
     try {
       const result = await createStudent(form);
@@ -44,7 +44,7 @@ export default function Students() {
       setForm({ full_name: '', email: '', phone: '' });
       setShowModal(false);
     } catch (err) {
-      toast.error(err.response?.data?.detail || 'Failed to create student');
+      toast.error(err.response?.data?.detail || 'Échec de la création de l\'étudiant');
     } finally {
       setSubmitting(false);
     }
@@ -54,8 +54,8 @@ export default function Students() {
     try {
       await deleteUser(id);
       setStudents(prev => prev.filter(s => s.id !== id));
-      toast.success('Student deleted');
-    } catch { toast.error('Failed to delete student'); }
+      toast.success('Étudiant supprimé');
+    } catch { toast.error('Échec de la suppression de l\'étudiant'); }
     setConfirm(null);
   };
 
@@ -69,7 +69,7 @@ export default function Students() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Students</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Étudiants</h1>
         <button
           onClick={() => setShowModal(true)}
           className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors"
@@ -77,7 +77,7 @@ export default function Students() {
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
           </svg>
-          Add Student
+          Ajouter un étudiant
         </button>
       </div>
 
@@ -87,10 +87,10 @@ export default function Students() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           <div className="flex-1 text-sm text-green-800">
-            <p className="font-semibold">Student account created. Share these login credentials:</p>
-            <p>Email: <span className="font-mono">{createdCreds.email}</span></p>
-            <p>Temp Password: <span className="font-mono font-semibold">{createdCreds.password}</span></p>
-            <p className="text-xs mt-1 text-green-600">Student will be prompted to change password on first login.</p>
+            <p className="font-semibold">Compte étudiant créé. Partagez ces identifiants de connexion :</p>
+            <p>Email : <span className="font-mono">{createdCreds.email}</span></p>
+            <p>Mot de passe temporaire : <span className="font-mono font-semibold">{createdCreds.password}</span></p>
+            <p className="text-xs mt-1 text-green-600">L'étudiant devra changer son mot de passe lors de sa première connexion.</p>
           </div>
           <button onClick={() => setCreatedCreds(null)} className="text-green-500 hover:text-green-700">✕</button>
         </div>
@@ -102,7 +102,7 @@ export default function Students() {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M17 11A6 6 0 115 11a6 6 0 0112 0z" />
         </svg>
         <input
-          type="text" placeholder="Search students..."
+          type="text" placeholder="Rechercher des étudiants..."
           value={search} onChange={e => setSearch(e.target.value)}
           className="pl-9 pr-4 py-2 w-full border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
         />
@@ -114,13 +114,13 @@ export default function Students() {
             <svg className="w-10 h-10 mx-auto mb-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
-            <p>{search ? 'No students match your search.' : 'No students yet. Add one to get started.'}</p>
+            <p>{search ? 'Aucun étudiant ne correspond à votre recherche.' : 'Aucun étudiant pour le moment. Ajoutez-en un pour commencer.'}</p>
           </div>
         ) : (
           <table className="w-full text-sm">
             <thead className="bg-gray-50">
               <tr>
-                {['Name', 'Email', 'Phone', 'Classes', 'Status', ''].map(h => (
+                {['Nom', 'Email', 'Téléphone', 'Classes', 'Statut', ''].map(h => (
                   <th key={h} className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">{h}</th>
                 ))}
               </tr>
@@ -143,15 +143,15 @@ export default function Students() {
                   <td className="px-5 py-4 text-gray-500 max-w-xs truncate">{getStudentClasses(s.class_ids)}</td>
                   <td className="px-5 py-4">
                     <span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${s.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600'}`}>
-                      {s.is_active ? 'Active' : 'Inactive'}
+                      {s.is_active ? 'Actif' : 'Inactif'}
                     </span>
                   </td>
                   <td className="px-5 py-4 flex items-center gap-3">
-                    <Link to={`/students/${s.id}`} className="text-indigo-600 hover:text-indigo-800 text-xs font-medium">View</Link>
+                    <Link to={`/students/${s.id}`} className="text-indigo-600 hover:text-indigo-800 text-xs font-medium">Voir</Link>
                     <button
                       onClick={() => setConfirm({ id: s.id, name: s.full_name })}
                       className="text-red-500 hover:text-red-700 text-xs font-medium"
-                    >Delete</button>
+                    >Supprimer</button>
                   </td>
                 </tr>
               ))}
@@ -160,36 +160,36 @@ export default function Students() {
         )}
       </div>
 
-      <Modal isOpen={showModal} onClose={() => setShowModal(false)} title="Add New Student">
+      <Modal isOpen={showModal} onClose={() => setShowModal(false)} title="Ajouter un nouvel étudiant">
         <form onSubmit={handleSubmit} className="space-y-4 py-4 px-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Nom complet *</label>
             <input type="text" required value={form.full_name}
               onChange={e => setForm(p => ({ ...p, full_name: e.target.value }))}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
-              placeholder="Jane Smith" />
+              placeholder="Marie Martin" />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
             <input type="email" required value={form.email}
               onChange={e => setForm(p => ({ ...p, email: e.target.value }))}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
-              placeholder="student@school.edu" />
+              placeholder="etudiant@ecole.fr" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Téléphone</label>
             <input type="tel" value={form.phone}
               onChange={e => setForm(p => ({ ...p, phone: e.target.value }))}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
-              placeholder="+1 234 567 8900" />
+              placeholder="+212 123 456 789" />
           </div>
-          <p className="text-xs text-gray-400">Student will be required to change their password on first login.</p>
+          <p className="text-xs text-gray-400">L'étudiant devra changer son mot de passe lors de sa première connexion.</p>
           <div className="flex gap-3 pt-2">
             <button type="button" onClick={() => setShowModal(false)}
-              className="flex-1 px-4 py-2 text-sm border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">Cancel</button>
+              className="flex-1 px-4 py-2 text-sm border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">Annuler</button>
             <button type="submit" disabled={submitting}
               className="flex-1 px-4 py-2 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50">
-              {submitting ? 'Creating...' : 'Create Student'}
+              {submitting ? 'Création...' : 'Créer l\'étudiant'}
             </button>
           </div>
         </form>
@@ -198,8 +198,8 @@ export default function Students() {
       <ConfirmDialog
         isOpen={!!confirm} onClose={() => setConfirm(null)}
         onConfirm={() => handleDelete(confirm?.id)}
-        title="Delete Student"
-        message={`Are you sure you want to delete ${confirm?.name}?`}
+        title="Supprimer l'étudiant"
+        message={`Êtes-vous sûr de vouloir supprimer ${confirm?.name} ?`}
       />
     </div>
   );

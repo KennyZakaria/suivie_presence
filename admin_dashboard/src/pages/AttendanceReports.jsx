@@ -18,17 +18,17 @@ export default function AttendanceReports() {
   const [fetched, setFetched] = useState(false);
 
   useEffect(() => {
-    getClasses().then(setClasses).catch(() => toast.error('Failed to load classes'));
+    getClasses().then(setClasses).catch(() => toast.error('Échec du chargement des classes'));
   }, []);
 
   const fetchReport = async () => {
-    if (!classId) return toast.error('Please select a class');
+    if (!classId) return toast.error('Veuillez sélectionner une classe');
     setLoading(true);
     try {
       const data = await getAttendanceReport(classId, startDate, endDate);
       setRecords(data);
       setFetched(true);
-    } catch { toast.error('Failed to load report'); }
+    } catch { toast.error('Échec du chargement du rapport'); }
     finally { setLoading(false); }
   };
 
@@ -42,7 +42,7 @@ export default function AttendanceReports() {
   const studentRows = Object.values(studentMap);
 
   const exportCSV = () => {
-    const headers = ['Student ID', 'Present', 'Absent', 'Late', 'Total', 'Rate (%)'];
+    const headers = ['ID Étudiant', 'Présent', 'Absent', 'En retard', 'Total', 'Taux (%)'];
     const rows = studentRows.map(s => [
       s.student_id, s.present, s.absent, s.late, s.total,
       s.total > 0 ? ((s.present / s.total) * 100).toFixed(1) : '0',
@@ -51,38 +51,38 @@ export default function AttendanceReports() {
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a'); a.href = url;
-    a.download = `attendance_${classId}_${startDate}_${endDate}.csv`; a.click();
+    a.download = `presence_${classId}_${startDate}_${endDate}.csv`; a.click();
     URL.revokeObjectURL(url);
   };
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-gray-900">Attendance Reports</h1>
+      <h1 className="text-2xl font-bold text-gray-900">Rapports de présence</h1>
 
       {/* Filters */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 items-end">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Class</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Classe</label>
             <select value={classId} onChange={e => setClassId(e.target.value)}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
-              <option value="">— Select class —</option>
+              <option value="">— Sélectionner une classe —</option>
               {classes.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">From</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">De</label>
             <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">To</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">À</label>
             <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" />
           </div>
           <button onClick={fetchReport} disabled={loading}
             className="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 disabled:opacity-50 transition-colors">
-            {loading ? 'Loading...' : 'Generate Report'}
+            {loading ? 'Chargement...' : 'Générer le rapport'}
           </button>
         </div>
       </div>
@@ -95,10 +95,10 @@ export default function AttendanceReports() {
           {studentRows.length > 0 && (
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {[
-                { label: 'Students', value: studentRows.length, color: 'text-indigo-600' },
-                { label: 'Total Sessions', value: records.length, color: 'text-gray-700' },
-                { label: 'Present', value: records.filter(r => r.status === 'present').length, color: 'text-green-600' },
-                { label: 'Absent', value: records.filter(r => r.status === 'absent').length, color: 'text-red-500' },
+                { label: 'Étudiants', value: studentRows.length, color: 'text-indigo-600' },
+                { label: 'Total sessions', value: records.length, color: 'text-gray-700' },
+                { label: 'Présents', value: records.filter(r => r.status === 'present').length, color: 'text-green-600' },
+                { label: 'Absents', value: records.filter(r => r.status === 'absent').length, color: 'text-red-500' },
               ].map(s => (
                 <div key={s.label} className="bg-white rounded-xl border border-gray-100 shadow-sm p-4 text-center">
                   <p className={`text-2xl font-bold ${s.color}`}>{s.value}</p>
@@ -111,24 +111,24 @@ export default function AttendanceReports() {
           {/* Table */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
             <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-              <h2 className="font-semibold text-gray-900">Per-Student Summary</h2>
+              <h2 className="font-semibold text-gray-900">Résumé par étudiant</h2>
               {studentRows.length > 0 && (
                 <button onClick={exportCSV}
                   className="inline-flex items-center gap-1.5 text-sm text-indigo-600 hover:text-indigo-800 font-medium">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                   </svg>
-                  Export CSV
+                  Exporter CSV
                 </button>
               )}
             </div>
             {studentRows.length === 0 ? (
-              <p className="text-center py-16 text-gray-400 text-sm">No records found for the selected filters</p>
+              <p className="text-center py-16 text-gray-400 text-sm">Aucun enregistrement trouvé pour les filtres sélectionnés</p>
             ) : (
               <table className="w-full text-sm">
                 <thead className="bg-gray-50">
                   <tr>
-                    {['Student ID', 'Present', 'Absent', 'Late', 'Total', 'Rate'].map(h => (
+                    {['ID Étudiant', 'Présent', 'Absent', 'En retard', 'Total', 'Taux'].map(h => (
                       <th key={h} className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase">{h}</th>
                     ))}
                   </tr>
@@ -165,12 +165,12 @@ export default function AttendanceReports() {
           {/* Raw records */}
           {records.length > 0 && (
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-              <h2 className="font-semibold text-gray-900 px-5 py-4 border-b border-gray-100">All Records ({records.length})</h2>
+              <h2 className="font-semibold text-gray-900 px-5 py-4 border-b border-gray-100">Tous les enregistrements ({records.length})</h2>
               <div className="overflow-x-auto max-h-96 overflow-y-auto">
                 <table className="w-full text-sm">
                   <thead className="bg-gray-50 sticky top-0">
                     <tr>
-                      {['Date', 'Student ID', 'Status', 'Notes'].map(h => (
+                      {['Date', 'ID Étudiant', 'Statut', 'Notes'].map(h => (
                         <th key={h} className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase">{h}</th>
                       ))}
                     </tr>
@@ -197,7 +197,7 @@ export default function AttendanceReports() {
           <svg className="w-12 h-12 mx-auto mb-3 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
-          <p>Select a class and date range, then click Generate Report.</p>
+          <p>Sélectionnez une classe et une plage de dates, puis cliquez sur Générer le rapport.</p>
         </div>
       )}
     </div>

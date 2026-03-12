@@ -35,8 +35,8 @@ function ProtectedRoute({ children }) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Access Denied</h1>
-          <p className="text-gray-500">You do not have permission to access this page.</p>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Accès refusé</h1>
+          <p className="text-gray-500">Vous n'avez pas la permission d'accéder à cette page.</p>
         </div>
       </div>
     );

@@ -5,9 +5,9 @@ import ConfirmDialog from '../components/common/ConfirmDialog';
 import toast from 'react-hot-toast';
 
 const LEVEL_STYLES = {
-  1: { badge: 'bg-yellow-100 text-yellow-800', label: 'Level 1 – Warning' },
-  2: { badge: 'bg-orange-100 text-orange-800', label: 'Level 2 – Parent Contact' },
-  3: { badge: 'bg-red-100 text-red-800', label: 'Level 3 – Suspension' },
+  1: { badge: 'bg-yellow-100 text-yellow-800', label: 'Niveau 1 – Avertissement' },
+  2: { badge: 'bg-orange-100 text-orange-800', label: 'Niveau 2 – Contact parent' },
+  3: { badge: 'bg-red-100 text-red-800', label: 'Niveau 3 – Suspension' },
 };
 
 export default function Reviews() {
@@ -22,7 +22,7 @@ export default function Reviews() {
   useEffect(() => {
     getReviews()
       .then(setReviews)
-      .catch(() => toast.error('Failed to load reviews'))
+      .catch(() => toast.error('Échec du chargement des avis'))
       .finally(() => setLoading(false));
   }, []);
 
@@ -31,8 +31,8 @@ export default function Reviews() {
     try {
       await resolveReview(resolveTarget.id);
       setReviews(prev => prev.map(r => r.id === resolveTarget.id ? { ...r, is_resolved: true } : r));
-      toast.success('Review marked as resolved');
-    } catch { toast.error('Failed to resolve review'); }
+      toast.success('Avis marqué comme résolu');
+    } catch { toast.error('Échec de la résolution de l\'avis'); }
     finally { setResolving(false); setResolveTarget(null); }
   };
 
@@ -55,15 +55,15 @@ export default function Reviews() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-gray-900">Disciplinary Reviews</h1>
+      <h1 className="text-2xl font-bold text-gray-900">Avis disciplinaires</h1>
 
       {/* Summary cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {[
-          { label: 'Open Reviews', value: counts.open, color: 'text-indigo-600' },
-          { label: 'Level 1 – Warning', value: counts[1] || 0, color: 'text-yellow-600' },
-          { label: 'Level 2 – Parent', value: counts[2] || 0, color: 'text-orange-600' },
-          { label: 'Level 3 – Suspension', value: counts[3] || 0, color: 'text-red-600' },
+          { label: 'Avis ouverts', value: counts.open, color: 'text-indigo-600' },
+          { label: 'Niveau 1 – Avertissement', value: counts[1] || 0, color: 'text-yellow-600' },
+          { label: 'Niveau 2 – Parent', value: counts[2] || 0, color: 'text-orange-600' },
+          { label: 'Niveau 3 – Suspension', value: counts[3] || 0, color: 'text-red-600' },
         ].map(s => (
           <div key={s.label} className="bg-white rounded-xl border border-gray-100 shadow-sm p-4 text-center">
             <p className={`text-2xl font-bold ${s.color}`}>{s.value}</p>
@@ -75,25 +75,25 @@ export default function Reviews() {
       {/* Filters */}
       <div className="flex flex-wrap gap-3">
         <div className="flex items-center gap-2">
-          <label className="text-sm font-medium text-gray-700">Level:</label>
+          <label className="text-sm font-medium text-gray-700">Niveau :</label>
           <select value={levelFilter} onChange={e => setLevelFilter(e.target.value)}
             className="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
-            <option value="all">All Levels</option>
-            <option value="1">Level 1 – Warning</option>
-            <option value="2">Level 2 – Parent Contact</option>
-            <option value="3">Level 3 – Suspension</option>
+            <option value="all">Tous les niveaux</option>
+            <option value="1">Niveau 1 – Avertissement</option>
+            <option value="2">Niveau 2 – Contact parent</option>
+            <option value="3">Niveau 3 – Suspension</option>
           </select>
         </div>
         <div className="flex items-center gap-2">
-          <label className="text-sm font-medium text-gray-700">Status:</label>
+          <label className="text-sm font-medium text-gray-700">Statut :</label>
           <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}
             className="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
-            <option value="all">All</option>
-            <option value="open">Open</option>
-            <option value="resolved">Resolved</option>
+            <option value="all">Tous</option>
+            <option value="open">Ouverts</option>
+            <option value="resolved">Résolus</option>
           </select>
         </div>
-        <span className="ml-auto text-sm text-gray-400 self-center">{filtered.length} review{filtered.length !== 1 ? 's' : ''}</span>
+        <span className="ml-auto text-sm text-gray-400 self-center">{filtered.length} avis</span>
       </div>
 
       {/* Review list */}
@@ -102,7 +102,7 @@ export default function Reviews() {
           <svg className="w-10 h-10 mx-auto mb-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <p>No reviews match the selected filters.</p>
+          <p>Aucun avis ne correspond aux filtres sélectionnés.</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -123,20 +123,20 @@ export default function Reviews() {
                       <div>
                         <p className="font-semibold text-gray-900">{r.title}</p>
                         <p className="text-xs text-gray-500 mt-0.5">
-                          Student: <span className="font-medium text-gray-700">{r.student_id}</span>
-                          {' · '}Teacher: <span className="font-medium text-gray-700">{r.teacher_id}</span>
+                          Étudiant : <span className="font-medium text-gray-700">{r.student_id}</span>
+                          {' · '}Enseignant : <span className="font-medium text-gray-700">{r.teacher_id}</span>
                           {' · '}{r.date}
                         </p>
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
                         {r.is_resolved ? (
-                          <span className="text-xs bg-green-100 text-green-700 font-medium px-2 py-0.5 rounded-full">Resolved</span>
+                          <span className="text-xs bg-green-100 text-green-700 font-medium px-2 py-0.5 rounded-full">Résolu</span>
                         ) : (
                           <button
                             onClick={() => setResolveTarget(r)}
                             className="text-xs bg-indigo-50 text-indigo-700 font-medium px-3 py-1 rounded-lg hover:bg-indigo-100 transition-colors"
                           >
-                            Resolve
+                            Résoudre
                           </button>
                         )}
                         <button onClick={() => toggleExpand(r.id)}
@@ -152,7 +152,7 @@ export default function Reviews() {
                       <div className="mt-3 pt-3 border-t border-gray-100">
                         <p className="text-sm text-gray-700 whitespace-pre-wrap">{r.description}</p>
                         {r.class_id && (
-                          <p className="text-xs text-gray-400 mt-2">Class: {r.class_id}</p>
+                          <p className="text-xs text-gray-400 mt-2">Classe : {r.class_id}</p>
                         )}
                       </div>
                     )}
@@ -168,9 +168,9 @@ export default function Reviews() {
         isOpen={!!resolveTarget}
         onClose={() => setResolveTarget(null)}
         onConfirm={handleResolve}
-        title="Resolve Review"
-        message={`Mark "${resolveTarget?.title}" as resolved?`}
-        confirmLabel={resolving ? 'Resolving...' : 'Mark Resolved'}
+        title="Résoudre l'avis"
+        message={`Marquer "${resolveTarget?.title}" comme résolu ?`}
+        confirmLabel={resolving ? 'Résolution...' : 'Marquer comme résolu'}
       />
     </div>
   );

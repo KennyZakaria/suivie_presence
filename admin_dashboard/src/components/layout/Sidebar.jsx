@@ -12,12 +12,12 @@ import {
 import { useAuth } from '../../hooks/useAuth';
 
 const navItems = [
-  { to: '/', label: 'Dashboard', icon: MdDashboard, end: true },
-  { to: '/teachers', label: 'Teachers', icon: MdPeople },
-  { to: '/students', label: 'Students', icon: MdSchool },
+  { to: '/', label: 'Tableau de bord', icon: MdDashboard, end: true },
+  { to: '/teachers', label: 'Enseignants', icon: MdPeople },
+  { to: '/students', label: 'Étudiants', icon: MdSchool },
   { to: '/classes', label: 'Classes', icon: MdClass },
-  { to: '/attendance', label: 'Attendance Reports', icon: MdAssignment },
-  { to: '/reviews', label: 'Disciplinary Reviews', icon: MdGavel },
+  { to: '/attendance', label: 'Rapports de présence', icon: MdAssignment },
+  { to: '/reviews', label: 'Avis disciplinaires', icon: MdGavel },
 ];
 
 function Sidebar() {
@@ -48,16 +48,16 @@ function Sidebar() {
         </div>
         <div>
           <h1 className="text-white font-bold text-sm leading-tight">
-            School Admin
+            Admin École
           </h1>
-          <p className="text-indigo-300 text-xs">Attendance System</p>
+          <p className="text-indigo-300 text-xs">Système de présence</p>
         </div>
       </div>
 
       {/* Navigation */}
       <nav className="sidebar-nav">
         <p className="text-indigo-400 text-xs font-semibold uppercase tracking-widest px-3 mb-2">
-          Main Menu
+          Menu principal
         </p>
         {navItems.map((item) => {
           const Icon = item.icon;
@@ -95,7 +95,7 @@ function Sidebar() {
           className="flex items-center gap-2 w-full px-3 py-2 rounded-lg text-indigo-200 hover:bg-red-700/50 hover:text-white transition-colors text-sm font-medium"
         >
           <MdLogout className="w-5 h-5" />
-          Sign Out
+          Se déconnecter
         </button>
       </div>
     </aside>

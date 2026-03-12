@@ -5,12 +5,12 @@ import { useAuth } from '../../hooks/useAuth';
 import { getReviewStats } from '../../services/reviewService';
 
 const routeTitles = {
-  '/': 'Dashboard',
-  '/teachers': 'Teachers',
-  '/students': 'Students',
+  '/': 'Tableau de bord',
+  '/teachers': 'Enseignants',
+  '/students': 'Étudiants',
   '/classes': 'Classes',
-  '/attendance': 'Attendance Reports',
-  '/reviews': 'Disciplinary Reviews',
+  '/attendance': 'Rapports de présence',
+  '/reviews': 'Avis disciplinaires',
 };
 
 function Navbar() {
@@ -21,9 +21,9 @@ function Navbar() {
   // Get page title
   const getTitle = () => {
     const path = location.pathname;
-    if (path.startsWith('/students/')) return 'Student Profile';
-    if (path.startsWith('/classes/')) return 'Class Detail';
-    return routeTitles[path] || 'Admin Dashboard';
+    if (path.startsWith('/students/')) return 'Profil étudiant';
+    if (path.startsWith('/classes/')) return 'Détails de la classe';
+    return routeTitles[path] || 'Tableau de bord Admin';
   };
 
   // Fetch open review count for notification badge
@@ -57,7 +57,7 @@ function Navbar() {
       <div>
         <h2 className="text-xl font-bold text-gray-900">{getTitle()}</h2>
         <p className="text-xs text-gray-400 mt-0.5">
-          {new Date().toLocaleDateString('en-US', {
+          {new Date().toLocaleDateString('fr-FR', {
             weekday: 'long',
             year: 'numeric',
             month: 'long',
@@ -93,7 +93,7 @@ function Navbar() {
             </p>
             <p className="text-xs text-gray-400 flex items-center gap-1">
               <MdAdminPanelSettings className="w-3 h-3" />
-              Administrator
+              Administrateur
             </p>
           </div>
         </div>
