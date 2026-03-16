@@ -11,6 +11,7 @@ const routeTitles = {
   '/classes': 'Classes',
   '/attendance': 'Rapports de présence',
   '/reviews': 'Avis disciplinaires',
+  '/justifications': "Justifications d'absence",
 };
 
 function Navbar() {

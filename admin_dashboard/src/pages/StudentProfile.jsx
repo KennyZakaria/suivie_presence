@@ -38,6 +38,9 @@ export default function StudentProfile() {
   ].filter(d => d.value > 0) : [];
 
   const levelColors = { 1: 'bg-yellow-100 text-yellow-700', 2: 'bg-orange-100 text-orange-700', 3: 'bg-red-100 text-red-700' };
+  const sentimentColors = { positive: 'bg-green-100 text-green-700', negative: 'bg-red-100 text-red-700' };
+  const comments = reviews.filter(r => r.review_type === 'comment');
+  const conseils = reviews.filter(r => !r.review_type || r.review_type === 'conseil_discipline');
 
   return (
     <div className="space-y-6 max-w-5xl">
@@ -110,20 +113,30 @@ export default function StudentProfile() {
 
         {/* Reviews Summary */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3 className="font-semibold text-gray-900 mb-3">Avis disciplinaires ({reviews.length})</h3>
+          <h3 className="font-semibold text-gray-900 mb-3">Commentaires & discipline ({reviews.length})</h3>
           {reviews.length === 0 ? (
-            <p className="text-gray-400 text-sm text-center mt-10">Aucun avis</p>
+            <p className="text-gray-400 text-sm text-center mt-10">Aucun commentaire</p>
           ) : (
             <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
-              {reviews.map(r => (
+              {comments.map(r => (
                 <div key={r.id} className="border border-gray-100 rounded-lg p-3">
                   <div className="flex items-center justify-between mb-1">
-                      <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${levelColors[r.level]}`}>
-                      Niveau {r.level}
+                    <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${sentimentColors[r.sentiment] || sentimentColors.negative}`}>
+                      {r.sentiment === 'positive' ? '👍 Positif' : '👎 Négatif'}
                     </span>
-                    {r.is_resolved && (
-                      <span className="text-xs text-green-600 font-medium">Résolu</span>
-                    )}
+                    {r.is_resolved && <span className="text-xs text-green-600 font-medium">Résolu</span>}
+                  </div>
+                  <p className="text-sm font-medium text-gray-800">{r.title}</p>
+                  <p className="text-xs text-gray-400">{r.date}</p>
+                </div>
+              ))}
+              {conseils.map(r => (
+                <div key={r.id} className="border border-orange-100 bg-orange-50 rounded-lg p-3">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${levelColors[r.level] || levelColors[1]}`}>
+                      Conseil – Niveau {r.level}
+                    </span>
+                    {r.is_resolved && <span className="text-xs text-green-600 font-medium">Résolu</span>}
                   </div>
                   <p className="text-sm font-medium text-gray-800">{r.title}</p>
                   <p className="text-xs text-gray-400">{r.date}</p>

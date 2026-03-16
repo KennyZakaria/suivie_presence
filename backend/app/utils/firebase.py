@@ -10,7 +10,10 @@ _db = None
 #     global _db
 #     if not firebase_admin._apps:
 #         cred = credentials.Certificate(settings.firebase_credentials_path)
-#         firebase_admin.initialize_app(cred, {"projectId": settings.project_id})
+#         firebase_admin.initialize_app(cred, {
+#             "projectId": settings.project_id,
+#             "storageBucket": f"{settings.project_id}.appspot.com",
+#         })
 #     _db = firestore.client()
 
 def initialize_firebase():

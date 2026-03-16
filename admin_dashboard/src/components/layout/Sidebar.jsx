@@ -7,6 +7,7 @@ import {
   MdClass,
   MdAssignment,
   MdGavel,
+  MdDescription,
   MdLogout,
 } from 'react-icons/md';
 import { useAuth } from '../../hooks/useAuth';
@@ -18,6 +19,7 @@ const navItems = [
   { to: '/classes', label: 'Classes', icon: MdClass },
   { to: '/attendance', label: 'Rapports de présence', icon: MdAssignment },
   { to: '/reviews', label: 'Avis disciplinaires', icon: MdGavel },
+  { to: '/justifications', label: 'Justifications', icon: MdDescription },
 ];
 
 function Sidebar() {

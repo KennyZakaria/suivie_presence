@@ -6,3 +6,6 @@ export const getStudentReviews = (studentId) =>
 export const resolveReview = (reviewId) =>
   api.put(`/reviews/${reviewId}/resolve`, {}).then(r => r.data);
 export const getReviewStats = () => api.get('/reviews/stats').then(r => r.data);
+
+export const createConseilDiscipline = (data) =>
+  api.post('/reviews/conseil-discipline', data).then(r => r.data);

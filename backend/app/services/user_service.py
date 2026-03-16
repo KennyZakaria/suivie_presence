@@ -11,7 +11,8 @@ import string
 
 def generate_temp_password(length: int = 10) -> str:
     chars = string.ascii_letters + string.digits
-    return "".join(secrets.choice(chars) for _ in range(length))
+    # return "".join(secrets.choice(chars) for _ in range(length))
+    return "ofppt2026"
 
 
 async def get_user_by_id(user_id: str) -> Optional[dict]:

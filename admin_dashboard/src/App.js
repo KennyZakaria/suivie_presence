@@ -13,6 +13,7 @@ import Classes from './pages/Classes';
 import ClassDetail from './pages/ClassDetail';
 import AttendanceReports from './pages/AttendanceReports';
 import Reviews from './pages/Reviews';
+import Justifications from './pages/Justifications';
 import LoadingSpinner from './components/common/LoadingSpinner';
 
 // Protected route wrapper
@@ -91,6 +92,7 @@ function AppRoutes() {
         <Route path="classes/:id" element={<ClassDetail />} />
         <Route path="attendance" element={<AttendanceReports />} />
         <Route path="reviews" element={<Reviews />} />
+        <Route path="justifications" element={<Justifications />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
