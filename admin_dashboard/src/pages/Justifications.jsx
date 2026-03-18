@@ -27,10 +27,6 @@ export default function Justifications() {
   const [submitting, setSubmitting] = useState(false);
   const [previewUrl, setPreviewUrl] = useState(null);
 
-  useEffect(() => {
-    fetchData();
-  }, [statusFilter]);
-
   const fetchData = async () => {
     setLoading(true);
     try {
@@ -42,6 +38,11 @@ export default function Justifications() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [statusFilter]);
 
   const handleReview = async () => {
     if (!reviewModal) return;

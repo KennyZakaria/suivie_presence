@@ -41,7 +41,6 @@ export default function StudentProfile() {
   ].filter(d => d.value > 0) : [];
 
   const levelColors = { 1: 'bg-yellow-100 text-yellow-700', 2: 'bg-orange-100 text-orange-700', 3: 'bg-red-100 text-red-700' };
-  const sentimentColors = { positive: 'bg-green-100 text-green-700', negative: 'bg-red-100 text-red-700' };
   const comments = reviews.filter(r => r.review_type === 'comment');
   const positiveComments = comments.filter(r => r.sentiment === 'positive');
   const negativeComments = comments.filter(r => r.sentiment === 'negative');
