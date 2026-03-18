@@ -5,8 +5,10 @@ import 'providers/auth_provider.dart';
 import 'providers/notification_provider.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/auth/change_password_screen.dart';
+import 'screens/auth/terms_acceptance_screen.dart';
 import 'screens/teacher/teacher_home_screen.dart';
 import 'screens/student/student_home_screen.dart';
+import 'utils/secure_storage.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -70,7 +72,19 @@ class _SplashRouterState extends State<_SplashRouter> {
     } else if (auth.user!.isTeacher) {
       Navigator.pushReplacementNamed(context, '/teacher-home');
     } else {
-      Navigator.pushReplacementNamed(context, '/student-home');
+      // Student: check if terms are accepted
+      final accepted = await SecureStorage.hasAcceptedTerms(auth.user!.id);
+      if (!mounted) return;
+      if (!accepted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => TermsAcceptanceScreen(userId: auth.user!.id),
+          ),
+        );
+      } else {
+        Navigator.pushReplacementNamed(context, '/student-home');
+      }
     }
   }
 

@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SecureStorage {
   static const _tokenKey = 'auth_token';
   static const _userKey = 'auth_user';
+  static const _termsAcceptedPrefix = 'terms_accepted_';
 
   static Future<void> saveToken(String token) async {
     final prefs = await SharedPreferences.getInstance();
@@ -28,5 +29,16 @@ class SecureStorage {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_tokenKey);
     await prefs.remove(_userKey);
+  }
+
+  // --- Terms Acceptance ---
+  static Future<bool> hasAcceptedTerms(String userId) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('$_termsAcceptedPrefix$userId') ?? false;
+  }
+
+  static Future<void> setTermsAccepted(String userId) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('$_termsAcceptedPrefix$userId', true);
   }
 }

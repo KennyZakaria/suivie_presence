@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getClasses } from '../services/classService';
+import { getStudents } from '../services/userService';
 import { getAttendanceReport } from '../services/attendanceService';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import Badge from '../components/common/Badge';
@@ -7,6 +8,7 @@ import toast from 'react-hot-toast';
 
 export default function AttendanceReports() {
   const [classes, setClasses] = useState([]);
+  const [students, setStudents] = useState([]);
   const [classId, setClassId] = useState('');
   const [startDate, setStartDate] = useState(() => {
     const d = new Date(); d.setDate(d.getDate() - 30);
@@ -18,7 +20,9 @@ export default function AttendanceReports() {
   const [fetched, setFetched] = useState(false);
 
   useEffect(() => {
-    getClasses().then(setClasses).catch(() => toast.error('Échec du chargement des classes'));
+    Promise.all([getClasses(), getStudents()])
+      .then(([c, s]) => { setClasses(c); setStudents(s); })
+      .catch(() => toast.error('Échec du chargement des classes'));
   }, []);
 
   const fetchReport = async () => {
@@ -32,9 +36,12 @@ export default function AttendanceReports() {
     finally { setLoading(false); }
   };
 
+  // Name lookup helper
+  const getStudentName = (id) => students.find(s => s.id === id)?.full_name || id;
+
   // Aggregate per student
   const studentMap = records.reduce((acc, r) => {
-    if (!acc[r.student_id]) acc[r.student_id] = { student_id: r.student_id, present: 0, absent: 0, late: 0, total: 0 };
+    if (!acc[r.student_id]) acc[r.student_id] = { student_id: r.student_id, student_name: getStudentName(r.student_id), present: 0, absent: 0, late: 0, total: 0 };
     acc[r.student_id][r.status]++;
     acc[r.student_id].total++;
     return acc;
@@ -42,9 +49,9 @@ export default function AttendanceReports() {
   const studentRows = Object.values(studentMap);
 
   const exportCSV = () => {
-    const headers = ['ID Étudiant', 'Présent', 'Absent', 'En retard', 'Total', 'Taux (%)'];
+    const headers = ['Étudiant', 'Présent', 'Absent', 'En retard', 'Total', 'Taux (%)'];
     const rows = studentRows.map(s => [
-      s.student_id, s.present, s.absent, s.late, s.total,
+      s.student_name, s.present, s.absent, s.late, s.total,
       s.total > 0 ? ((s.present / s.total) * 100).toFixed(1) : '0',
     ]);
     const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
@@ -128,7 +135,7 @@ export default function AttendanceReports() {
               <table className="w-full text-sm">
                 <thead className="bg-gray-50">
                   <tr>
-                    {['ID Étudiant', 'Présent', 'Absent', 'En retard', 'Total', 'Taux'].map(h => (
+                    {['Étudiant', 'Présent', 'Absent', 'En retard', 'Total', 'Taux'].map(h => (
                       <th key={h} className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase">{h}</th>
                     ))}
                   </tr>
@@ -139,7 +146,7 @@ export default function AttendanceReports() {
                     const rateNum = parseFloat(rate);
                     return (
                       <tr key={s.student_id} className="hover:bg-gray-50">
-                        <td className="px-5 py-3 font-medium text-gray-800">{s.student_id}</td>
+                        <td className="px-5 py-3 font-medium text-gray-800">{s.student_name}</td>
                         <td className="px-5 py-3 text-green-600 font-medium">{s.present}</td>
                         <td className="px-5 py-3 text-red-500 font-medium">{s.absent}</td>
                         <td className="px-5 py-3 text-orange-500 font-medium">{s.late}</td>
@@ -170,7 +177,7 @@ export default function AttendanceReports() {
                 <table className="w-full text-sm">
                   <thead className="bg-gray-50 sticky top-0">
                     <tr>
-                      {['Date', 'ID Étudiant', 'Statut', 'Notes'].map(h => (
+                      {['Date', 'Étudiant', 'Statut', 'Notes'].map(h => (
                         <th key={h} className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase">{h}</th>
                       ))}
                     </tr>
@@ -179,7 +186,7 @@ export default function AttendanceReports() {
                     {records.map(r => (
                       <tr key={r.id} className="hover:bg-gray-50">
                         <td className="px-5 py-2.5 text-gray-700">{r.date}</td>
-                        <td className="px-5 py-2.5 text-gray-500">{r.student_id}</td>
+                        <td className="px-5 py-2.5 text-gray-500">{getStudentName(r.student_id)}</td>
                         <td className="px-5 py-2.5"><Badge status={r.status} /></td>
                         <td className="px-5 py-2.5 text-gray-400">{r.notes || '—'}</td>
                       </tr>

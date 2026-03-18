@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getClass, removeStudentFromClass } from '../services/classService';
+import { getTeachers } from '../services/userService';
 import { getClassAttendance } from '../services/attendanceService';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import Badge from '../components/common/Badge';
@@ -11,6 +12,7 @@ export default function ClassDetail() {
   const { id } = useParams();
   const [cls, setCls] = useState(null);
   const [students, setStudents] = useState([]);
+  const [teachers, setTeachers] = useState([]);
   const [attendance, setAttendance] = useState([]);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState('students');
@@ -19,10 +21,11 @@ export default function ClassDetail() {
   const [loadingAtt, setLoadingAtt] = useState(false);
 
   useEffect(() => {
-    getClass(id)
-      .then(data => {
+    Promise.all([getClass(id), getTeachers()])
+      .then(([data, t]) => {
         setCls(data);
         setStudents(data.students || []);
+        setTeachers(t);
       })
       .catch(() => toast.error('Échec du chargement de la classe'))
       .finally(() => setLoading(false));
@@ -54,6 +57,8 @@ export default function ClassDetail() {
   if (loading) return <div className="flex justify-center h-64 items-center"><LoadingSpinner size="lg" /></div>;
   if (!cls) return <div className="text-center py-16 text-gray-400">Classe non trouvée</div>;
 
+  const getTeacherName = (tid) => teachers.find(t => t.id === tid)?.full_name || 'Non assigné';
+  const getStudentName = (sid) => students.find(s => s.id === sid)?.full_name || sid;
   const statusCount = (status) => attendance.filter(a => a.status === status).length;
 
   return (
@@ -74,7 +79,7 @@ export default function ClassDetail() {
       <div className="grid grid-cols-3 gap-4">
         {[
           { label: 'Étudiants', value: cls.student_ids?.length || 0 },
-          { label: 'Enseignant', value: cls.teacher_id || 'Non assigné' },
+          { label: 'Enseignant', value: getTeacherName(cls.teacher_id) },
           { label: 'Statut', value: cls.is_active ? 'Actif' : 'Inactif' },
         ].map(item => (
           <div key={item.label} className="bg-white rounded-xl border border-gray-100 shadow-sm p-4 text-center">
@@ -163,7 +168,7 @@ export default function ClassDetail() {
               <table className="w-full text-sm">
                 <thead className="bg-gray-50">
                   <tr>
-                    {['ID Étudiant', 'Statut', 'Notes'].map(h => (
+                    {['Étudiant', 'Statut', 'Notes'].map(h => (
                       <th key={h} className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase">{h}</th>
                     ))}
                   </tr>
@@ -171,7 +176,7 @@ export default function ClassDetail() {
                 <tbody className="divide-y divide-gray-100">
                   {attendance.map(a => (
                     <tr key={a.id} className="hover:bg-gray-50">
-                      <td className="px-5 py-3 text-gray-700">{a.student_id}</td>
+                      <td className="px-5 py-3 text-gray-700">{getStudentName(a.student_id)}</td>
                       <td className="px-5 py-3"><Badge status={a.status} /></td>
                       <td className="px-5 py-3 text-gray-400">{a.notes || '—'}</td>
                     </tr>

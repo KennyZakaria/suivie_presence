@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getReviews, resolveReview, createConseilDiscipline } from '../services/reviewService';
-import { getStudents } from '../services/userService';
+import { getStudents, getTeachers } from '../services/userService';
 import { getClasses } from '../services/classService';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import ConfirmDialog from '../components/common/ConfirmDialog';
@@ -23,6 +23,7 @@ const TODAY = new Date().toISOString().split('T')[0];
 export default function Reviews() {
   const [reviews, setReviews] = useState([]);
   const [students, setStudents] = useState([]);
+  const [teachers, setTeachers] = useState([]);
   const [classes, setClasses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('comments'); // 'comments' | 'conseil'
@@ -38,10 +39,12 @@ export default function Reviews() {
     Promise.all([
       getReviews(),
       getStudents(),
+      getTeachers(),
       getClasses(),
-    ]).then(([r, s, c]) => {
+    ]).then(([r, s, t, c]) => {
       setReviews(r);
       setStudents(s);
+      setTeachers(t);
       setClasses(c);
     }).catch(() => toast.error('Échec du chargement'))
       .finally(() => setLoading(false));
@@ -73,6 +76,11 @@ export default function Reviews() {
   };
 
   const toggleExpand = (id) => setExpanded(p => ({ ...p, [id]: !p[id] }));
+
+  // Name lookup helpers
+  const getStudentName = (id) => students.find(s => s.id === id)?.full_name || id;
+  const getTeacherName = (id) => teachers.find(t => t.id === id)?.full_name || id;
+  const getClassName = (id) => classes.find(c => c.id === id)?.name || id;
 
   // Separate reviews by type (old records without review_type default to conseil_discipline)
   const comments = reviews.filter(r => r.review_type === 'comment');
@@ -187,8 +195,8 @@ export default function Reviews() {
                       <div>
                         <p className="font-semibold text-gray-900">{r.title}</p>
                         <p className="text-xs text-gray-500 mt-0.5">
-                          Étudiant : <span className="font-medium text-gray-700">{r.student_id}</span>
-                          {' · '}Par : <span className="font-medium text-gray-700">{r.teacher_id}</span>
+                          Étudiant : <span className="font-medium text-gray-700">{getStudentName(r.student_id)}</span>
+                          {' · '}Par : <span className="font-medium text-gray-700">{getTeacherName(r.teacher_id)}</span>
                           {' · '}{r.date}
                         </p>
                       </div>
@@ -213,7 +221,7 @@ export default function Reviews() {
                     {isExpanded && (
                       <div className="mt-3 pt-3 border-t border-gray-100">
                         <p className="text-sm text-gray-700 whitespace-pre-wrap">{r.description}</p>
-                        {r.class_id && <p className="text-xs text-gray-400 mt-2">Classe : {r.class_id}</p>}
+                        {r.class_id && <p className="text-xs text-gray-400 mt-2">Classe : {getClassName(r.class_id)}</p>}
                       </div>
                     )}
                   </div>

@@ -54,7 +54,7 @@ async def create_teacher(data: dict) -> dict:
         "profile_image_url": None,
         "class_ids": [],
         "is_active": True,
-        "must_change_password": False,
+        "must_change_password": True,
         "fcm_token": None,
         "created_at": now,
         "updated_at": now,

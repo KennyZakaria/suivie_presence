@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { getUser } from '../services/userService';
 import { getStudentSummary, getStudentAttendance } from '../services/attendanceService';
 import { getStudentReviews } from '../services/reviewService';
+import { getClasses } from '../services/classService';
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import Badge from '../components/common/Badge';
@@ -16,6 +17,7 @@ export default function StudentProfile() {
   const [summary, setSummary] = useState(null);
   const [attendance, setAttendance] = useState([]);
   const [reviews, setReviews] = useState([]);
+  const [classes, setClasses] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -24,6 +26,7 @@ export default function StudentProfile() {
       getStudentSummary(id).then(setSummary),
       getStudentAttendance(id).then(d => setAttendance(d.slice(0, 20))),
       getStudentReviews(id).then(setReviews),
+      getClasses().then(setClasses),
     ]).catch(() => toast.error('Échec du chargement des données de l\'étudiant'))
       .finally(() => setLoading(false));
   }, [id]);
@@ -40,7 +43,12 @@ export default function StudentProfile() {
   const levelColors = { 1: 'bg-yellow-100 text-yellow-700', 2: 'bg-orange-100 text-orange-700', 3: 'bg-red-100 text-red-700' };
   const sentimentColors = { positive: 'bg-green-100 text-green-700', negative: 'bg-red-100 text-red-700' };
   const comments = reviews.filter(r => r.review_type === 'comment');
+  const positiveComments = comments.filter(r => r.sentiment === 'positive');
+  const negativeComments = comments.filter(r => r.sentiment === 'negative');
   const conseils = reviews.filter(r => !r.review_type || r.review_type === 'conseil_discipline');
+
+  // Class name lookup
+  const getClassName = (cid) => classes.find(c => c.id === cid)?.name || cid;
 
   return (
     <div className="space-y-6 max-w-5xl">
@@ -117,31 +125,71 @@ export default function StudentProfile() {
           {reviews.length === 0 ? (
             <p className="text-gray-400 text-sm text-center mt-10">Aucun commentaire</p>
           ) : (
-            <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
-              {comments.map(r => (
-                <div key={r.id} className="border border-gray-100 rounded-lg p-3">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${sentimentColors[r.sentiment] || sentimentColors.negative}`}>
-                      {r.sentiment === 'positive' ? '👍 Positif' : '👎 Négatif'}
-                    </span>
-                    {r.is_resolved && <span className="text-xs text-green-600 font-medium">Résolu</span>}
+            <div className="space-y-4 max-h-64 overflow-y-auto pr-1">
+              {/* Positive Comments */}
+              {positiveComments.length > 0 && (
+                <div>
+                  <p className="text-xs font-semibold text-green-700 uppercase tracking-wider mb-2 flex items-center gap-1">
+                    <span>👍</span> Commentaires positifs ({positiveComments.length})
+                  </p>
+                  <div className="space-y-2">
+                    {positiveComments.map(r => (
+                      <div key={r.id} className="border border-green-200 bg-green-50 rounded-lg p-3">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-green-100 text-green-700">👍 Positif</span>
+                          {r.is_resolved && <span className="text-xs text-green-600 font-medium">Résolu</span>}
+                        </div>
+                        <p className="text-sm font-medium text-gray-800">{r.title}</p>
+                        <p className="text-xs text-gray-400">{r.date}</p>
+                      </div>
+                    ))}
                   </div>
-                  <p className="text-sm font-medium text-gray-800">{r.title}</p>
-                  <p className="text-xs text-gray-400">{r.date}</p>
                 </div>
-              ))}
-              {conseils.map(r => (
-                <div key={r.id} className="border border-orange-100 bg-orange-50 rounded-lg p-3">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${levelColors[r.level] || levelColors[1]}`}>
-                      Conseil – Niveau {r.level}
-                    </span>
-                    {r.is_resolved && <span className="text-xs text-green-600 font-medium">Résolu</span>}
+              )}
+
+              {/* Negative Comments */}
+              {negativeComments.length > 0 && (
+                <div>
+                  <p className="text-xs font-semibold text-red-600 uppercase tracking-wider mb-2 flex items-center gap-1">
+                    <span>👎</span> Commentaires négatifs ({negativeComments.length})
+                  </p>
+                  <div className="space-y-2">
+                    {negativeComments.map(r => (
+                      <div key={r.id} className="border border-red-200 bg-red-50 rounded-lg p-3">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-red-100 text-red-700">👎 Négatif</span>
+                          {r.is_resolved && <span className="text-xs text-green-600 font-medium">Résolu</span>}
+                        </div>
+                        <p className="text-sm font-medium text-gray-800">{r.title}</p>
+                        <p className="text-xs text-gray-400">{r.date}</p>
+                      </div>
+                    ))}
                   </div>
-                  <p className="text-sm font-medium text-gray-800">{r.title}</p>
-                  <p className="text-xs text-gray-400">{r.date}</p>
                 </div>
-              ))}
+              )}
+
+              {/* Conseils de discipline */}
+              {conseils.length > 0 && (
+                <div>
+                  <p className="text-xs font-semibold text-orange-700 uppercase tracking-wider mb-2 flex items-center gap-1">
+                    <span>⚠️</span> Conseils de discipline ({conseils.length})
+                  </p>
+                  <div className="space-y-2">
+                    {conseils.map(r => (
+                      <div key={r.id} className="border border-orange-200 bg-orange-50 rounded-lg p-3">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${levelColors[r.level] || levelColors[1]}`}>
+                            Conseil – Niveau {r.level}
+                          </span>
+                          {r.is_resolved && <span className="text-xs text-green-600 font-medium">Résolu</span>}
+                        </div>
+                        <p className="text-sm font-medium text-gray-800">{r.title}</p>
+                        <p className="text-xs text-gray-400">{r.date}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -166,7 +214,7 @@ export default function StudentProfile() {
                 {attendance.map(a => (
                   <tr key={a.id} className="hover:bg-gray-50">
                     <td className="px-4 py-3 text-gray-700 font-medium">{a.date}</td>
-                    <td className="px-4 py-3 text-gray-500">{a.class_id}</td>
+                    <td className="px-4 py-3 text-gray-500">{getClassName(a.class_id)}</td>
                     <td className="px-4 py-3">
                       <Badge status={a.status} />
                     </td>

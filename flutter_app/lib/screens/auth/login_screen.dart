@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../constants/app_theme.dart';
 import '../../providers/auth_provider.dart';
+import '../../utils/secure_storage.dart';
+import 'terms_acceptance_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -37,7 +39,18 @@ class _LoginScreenState extends State<LoginScreen> {
       } else if (user.isTeacher) {
         Navigator.pushReplacementNamed(context, '/teacher-home');
       } else if (user.isStudent) {
-        Navigator.pushReplacementNamed(context, '/student-home');
+        final accepted = await SecureStorage.hasAcceptedTerms(user.id);
+        if (!mounted) return;
+        if (!accepted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (_) => TermsAcceptanceScreen(userId: user.id),
+            ),
+          );
+        } else {
+          Navigator.pushReplacementNamed(context, '/student-home');
+        }
       } else {
         Navigator.pushReplacementNamed(context, '/teacher-home');
       }
