@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from app.services.user_service import (
     create_teacher, create_student, get_all_teachers, get_all_students,
-    get_user_by_id, update_user, delete_user,
+    get_user_by_id, update_user, delete_user, reset_user_password,
 )
 from app.models.user import UserUpdate
 from app.middleware.auth import require_admin
@@ -72,3 +72,8 @@ async def update_user_endpoint(
 async def delete_user_endpoint(user_id: str, _: dict = Depends(require_admin)):
     await delete_user(user_id)
     return {"message": "User deleted"}
+
+
+@router.post("/{user_id}/reset-password")
+async def reset_password_endpoint(user_id: str, _: dict = Depends(require_admin)):
+    return await reset_user_password(user_id)

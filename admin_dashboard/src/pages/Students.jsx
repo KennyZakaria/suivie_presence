@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import * as XLSX from 'xlsx';
-import { createStudent, getStudents, deleteUser } from '../services/userService';
+import { createStudent, getStudents, deleteUser, resetUserPassword } from '../services/userService';
 import { getClasses } from '../services/classService';
 import Modal from '../components/common/Modal';
 import ConfirmDialog from '../components/common/ConfirmDialog';
@@ -359,6 +359,18 @@ export default function Students() {
                   </td>
                   <td className="px-5 py-4 flex items-center gap-3">
                     <Link to={`/students/${s.id}`} className="text-indigo-600 hover:text-indigo-800 text-xs font-medium">Voir</Link>
+                    <button
+                      onClick={async () => {
+                        if (!window.confirm(`Réinitialiser le mot de passe de ${s.full_name} ?`)) return;
+                        try {
+                          const res = await resetUserPassword(s.id);
+                          toast.success(`Mot de passe réinitialisé : ${res.temp_password}`, { duration: 10000 });
+                        } catch (e) {
+                          toast.error(e.response?.data?.detail || 'Erreur');
+                        }
+                      }}
+                      className="text-amber-600 hover:text-amber-800 text-xs font-medium"
+                    >Réinitialiser MDP</button>
                     <button
                       onClick={() => setConfirm({ id: s.id, name: s.full_name })}
                       className="text-red-500 hover:text-red-700 text-xs font-medium"

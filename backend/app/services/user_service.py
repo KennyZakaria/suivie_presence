@@ -145,3 +145,18 @@ async def update_fcm_token(user_id: str, token: str) -> bool:
         "updated_at": datetime.utcnow().isoformat(),
     })
     return True
+
+
+async def reset_user_password(user_id: str) -> dict:
+    db = get_db()
+    doc = db.collection("users").document(user_id).get()
+    if not doc.exists:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    temp_password = generate_temp_password()
+    db.collection("users").document(user_id).update({
+        "password_hash": hash_password(temp_password),
+        "must_change_password": True,
+        "updated_at": datetime.utcnow().isoformat(),
+    })
+    return {"temp_password": temp_password, "message": "Password reset successfully"}

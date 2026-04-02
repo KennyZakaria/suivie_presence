@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { createTeacher, getTeachers, deleteUser } from '../services/userService';
+import { createTeacher, getTeachers, deleteUser, resetUserPassword } from '../services/userService';
 import Modal from '../components/common/Modal';
 import ConfirmDialog from '../components/common/ConfirmDialog';
 import LoadingSpinner from '../components/common/LoadingSpinner';
@@ -123,7 +123,21 @@ export default function Teachers() {
                       {t.is_active ? 'Actif' : 'Inactif'}
                     </span>
                   </td>
-                  <td className="px-5 py-4">
+                  <td className="px-5 py-4 flex items-center gap-3">
+                    <button
+                      onClick={async () => {
+                        if (!window.confirm(`Réinitialiser le mot de passe de ${t.full_name} ?`)) return;
+                        try {
+                          const res = await resetUserPassword(t.id);
+                          toast.success(`Mot de passe réinitialisé : ${res.temp_password}`, { duration: 10000 });
+                        } catch (e) {
+                          toast.error(e.response?.data?.detail || 'Erreur');
+                        }
+                      }}
+                      className="text-amber-600 hover:text-amber-800 text-xs font-medium"
+                    >
+                      Réinitialiser MDP
+                    </button>
                     <button
                       onClick={() => setConfirm({ id: t.id, name: t.full_name })}
                       className="text-red-500 hover:text-red-700 text-xs font-medium"

@@ -7,3 +7,4 @@ export const createTeacher = (data) => api.post('/users/teachers', data).then(r 
 export const createStudent = (data) => api.post('/users/students', data).then(r => r.data);
 export const updateUser = (id, data) => api.put(`/users/${id}`, data).then(r => r.data);
 export const deleteUser = (id) => api.delete(`/users/${id}`).then(r => r.data);
+export const resetUserPassword = (id) => api.post(`/users/${id}/reset-password`).then(r => r.data);
