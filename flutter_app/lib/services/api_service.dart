@@ -5,7 +5,7 @@ import '../constants/api_constants.dart';
 import '../main.dart';
 import '../utils/secure_storage.dart';
 
-const _kTimeout = Duration(seconds: 15);
+const _kTimeout = Duration(seconds: 30);
 
 class ApiException implements Exception {
   final String message;

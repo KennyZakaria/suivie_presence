@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import '../models/user.dart';
 import '../services/auth_service.dart';
@@ -23,9 +24,44 @@ class AuthProvider extends ChangeNotifier {
     final token = await SecureStorage.getToken();
     final userJson = await SecureStorage.getUser();
     if (token != null && userJson != null) {
+      if (_isJwtExpired(token)) {
+        await SecureStorage.clear();
+        notifyListeners();
+        return;
+      }
       _token = token;
       _user = UserModel.fromJson(jsonDecode(userJson));
       notifyListeners();
+    }
+  }
+
+  /// Decodes the JWT payload locally and checks the [exp] claim.
+  /// Returns true if the token is expired or malformed.
+  bool _isJwtExpired(String token) {
+    try {
+      final parts = token.split('.');
+      if (parts.length != 3) return true;
+      // Pad base64url to a multiple of 4
+      String payload = parts[1];
+      switch (payload.length % 4) {
+        case 2:
+          payload += '==';
+          break;
+        case 3:
+          payload += '=';
+          break;
+      }
+      final decoded = utf8.decode(
+        Uint8List.fromList(base64Url.decode(payload)),
+      );
+      final map = jsonDecode(decoded) as Map<String, dynamic>;
+      final exp = map['exp'];
+      if (exp == null) return false;
+      final expiry =
+          DateTime.fromMillisecondsSinceEpoch((exp as int) * 1000, isUtc: true);
+      return DateTime.now().toUtc().isAfter(expiry);
+    } catch (_) {
+      return true;
     }
   }
 
