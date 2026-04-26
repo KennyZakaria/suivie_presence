@@ -39,21 +39,37 @@ class _TeacherHomeScreenState extends State<TeacherHomeScreen> {
           currentIndex: _currentIndex,
           onTap: (i) => setState(() => _currentIndex = i),
           items: [
-            const BottomNavigationBarItem(icon: Icon(Icons.class_outlined), activeIcon: Icon(Icons.class_rounded), label: 'Mes classes'),
+            const BottomNavigationBarItem(
+                icon: Icon(Icons.class_outlined),
+                activeIcon: Icon(Icons.class_rounded),
+                label: 'Mes classes'),
             BottomNavigationBarItem(
               icon: Stack(clipBehavior: Clip.none, children: [
                 const Icon(Icons.notifications_outlined),
                 if (notifProvider.unreadCount > 0)
-                  Positioned(right: -4, top: -4, child: Container(
-                    width: 16, height: 16,
-                    decoration: const BoxDecoration(color: AppTheme.error, shape: BoxShape.circle),
-                    child: Center(child: Text('${notifProvider.unreadCount}', style: const TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold))),
-                  )),
+                  Positioned(
+                      right: -4,
+                      top: -4,
+                      child: Container(
+                        width: 16,
+                        height: 16,
+                        decoration: const BoxDecoration(
+                            color: AppTheme.error, shape: BoxShape.circle),
+                        child: Center(
+                            child: Text('${notifProvider.unreadCount}',
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 9,
+                                    fontWeight: FontWeight.bold))),
+                      )),
               ]),
               activeIcon: const Icon(Icons.notifications_rounded),
               label: 'Notifications',
             ),
-            const BottomNavigationBarItem(icon: Icon(Icons.person_outline), activeIcon: Icon(Icons.person_rounded), label: 'Profil'),
+            const BottomNavigationBarItem(
+                icon: Icon(Icons.person_outline),
+                activeIcon: Icon(Icons.person_rounded),
+                label: 'Profil'),
           ],
         ),
       ),

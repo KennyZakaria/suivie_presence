@@ -21,23 +21,32 @@ String formatDateTime(String isoDate) {
 
 String todayString() => DateFormat('yyyy-MM-dd').format(DateTime.now());
 
-String formatDateForDisplay(DateTime dt) => DateFormat('EEEE, MMM d, yyyy').format(dt);
+String formatDateForDisplay(DateTime dt) =>
+    DateFormat('EEEE, MMM d, yyyy').format(dt);
 
 Color statusColor(String status) {
   switch (status) {
-    case 'present': return const Color(0xFF22C55E);
-    case 'absent':  return const Color(0xFFEF4444);
-    case 'late':    return const Color(0xFFF97316);
-    default:        return Colors.grey;
+    case 'present':
+      return const Color(0xFF22C55E);
+    case 'absent':
+      return const Color(0xFFEF4444);
+    case 'late':
+      return const Color(0xFFF97316);
+    default:
+      return Colors.grey;
   }
 }
 
 Color statusBgColor(String status) {
   switch (status) {
-    case 'present': return const Color(0xFFDCFCE7);
-    case 'absent':  return const Color(0xFFFEE2E2);
-    case 'late':    return const Color(0xFFFFEDD5);
-    default:        return Colors.grey.shade100;
+    case 'present':
+      return const Color(0xFFDCFCE7);
+    case 'absent':
+      return const Color(0xFFFEE2E2);
+    case 'late':
+      return const Color(0xFFFFEDD5);
+    default:
+      return Colors.grey.shade100;
   }
 }
 

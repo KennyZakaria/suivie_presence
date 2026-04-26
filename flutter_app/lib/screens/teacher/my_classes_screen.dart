@@ -26,7 +26,10 @@ class _MyClassesScreenState extends State<MyClassesScreen> {
   }
 
   Future<void> _loadClasses() async {
-    setState(() { _loading = true; _error = null; });
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
     try {
       _classes = await _service.getMyClasses();
     } catch (e) {
@@ -46,8 +49,10 @@ class _MyClassesScreenState extends State<MyClassesScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Bonjour, ${teacher?.fullName.split(' ').first ?? ''} !',
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            const Text('Mes classes', style: TextStyle(fontSize: 13, color: AppTheme.textSecondary)),
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const Text('Mes classes',
+                style: TextStyle(fontSize: 13, color: AppTheme.textSecondary)),
           ],
         ),
       ),
@@ -56,9 +61,13 @@ class _MyClassesScreenState extends State<MyClassesScreen> {
         child: _loading
             ? const Center(child: CircularProgressIndicator())
             : _error != null
-                ? Center(child: Text(_error!, style: const TextStyle(color: AppTheme.error)))
+                ? Center(
+                    child: Text(_error!,
+                        style: const TextStyle(color: AppTheme.error)))
                 : _classes.isEmpty
-                    ? const EmptyState(icon: Icons.class_outlined, message: 'Aucune classe assignée')
+                    ? const EmptyState(
+                        icon: Icons.class_outlined,
+                        message: 'Aucune classe assignée')
                     : ListView.separated(
                         padding: const EdgeInsets.all(16),
                         itemCount: _classes.length,
@@ -77,8 +86,12 @@ class _ClassCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = [
-      const Color(0xFF4F46E5), const Color(0xFF7C3AED), const Color(0xFF0D9488),
-      const Color(0xFFD97706), const Color(0xFFDC2626), const Color(0xFF2563EB),
+      const Color(0xFF4F46E5),
+      const Color(0xFF7C3AED),
+      const Color(0xFF0D9488),
+      const Color(0xFFD97706),
+      const Color(0xFFDC2626),
+      const Color(0xFF2563EB),
     ];
     final color = colors[cls.name.codeUnitAt(0) % colors.length];
 
@@ -87,7 +100,10 @@ class _ClassCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(16),
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
-        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => ClassDetailScreen(classModel: cls))),
+        onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (_) => ClassDetailScreen(classModel: cls))),
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
@@ -97,33 +113,52 @@ class _ClassCard extends StatelessWidget {
           child: Row(
             children: [
               Container(
-                width: 52, height: 52,
-                decoration: BoxDecoration(color: color.withOpacity(0.1), borderRadius: BorderRadius.circular(12)),
-                child: Center(child: Text(cls.name.substring(0, 1).toUpperCase(),
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: color))),
+                width: 52,
+                height: 52,
+                decoration: BoxDecoration(
+                    color: color.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12)),
+                child: Center(
+                    child: Text(cls.name.substring(0, 1).toUpperCase(),
+                        style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: color))),
               ),
               const SizedBox(width: 14),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(cls.name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
+                    Text(cls.name,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 15)),
                     const SizedBox(height: 2),
-                    Text(cls.subject, style: const TextStyle(color: AppTheme.textSecondary, fontSize: 13)),
+                    Text(cls.subject,
+                        style: const TextStyle(
+                            color: AppTheme.textSecondary, fontSize: 13)),
                     const SizedBox(height: 4),
                     Row(children: [
                       Icon(Icons.people_outline, size: 14, color: color),
                       const SizedBox(width: 4),
-                      Text('${cls.studentCount} élèves', style: TextStyle(color: color, fontSize: 12, fontWeight: FontWeight.w500)),
+                      Text('${cls.studentCount} élèves',
+                          style: TextStyle(
+                              color: color,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500)),
                       const SizedBox(width: 12),
-                      Icon(Icons.grade_outlined, size: 14, color: AppTheme.textSecondary),
+                      Icon(Icons.grade_outlined,
+                          size: 14, color: AppTheme.textSecondary),
                       const SizedBox(width: 4),
-                      Text('Niveau ${cls.grade}', style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
+                      Text('Niveau ${cls.grade}',
+                          style: const TextStyle(
+                              color: AppTheme.textSecondary, fontSize: 12)),
                     ]),
                   ],
                 ),
               ),
-              const Icon(Icons.chevron_right_rounded, color: AppTheme.textSecondary),
+              const Icon(Icons.chevron_right_rounded,
+                  color: AppTheme.textSecondary),
             ],
           ),
         ),
