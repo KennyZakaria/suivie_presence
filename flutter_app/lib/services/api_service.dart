@@ -116,10 +116,10 @@ class ApiService {
       final ext = name.split('.').last.toLowerCase();
       final mime = switch (ext) {
         'jpg' || 'jpeg' => MediaType('image', 'jpeg'),
-        'png'           => MediaType('image', 'png'),
-        'webp'          => MediaType('image', 'webp'),
-        'pdf'           => MediaType('application', 'pdf'),
-        _               => MediaType('image', 'jpeg'),
+        'png' => MediaType('image', 'png'),
+        'webp' => MediaType('image', 'webp'),
+        'pdf' => MediaType('application', 'pdf'),
+        _ => MediaType('image', 'jpeg'),
       };
       request.files.add(http.MultipartFile.fromBytes(
         fileField,

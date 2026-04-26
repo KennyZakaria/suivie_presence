@@ -255,3 +255,4 @@ sketch
 # End of https://www.toptal.com/developers/gitignore/api/react,flutter,python
 firebase-credentials.json
 *.env
+flutter_app/nul

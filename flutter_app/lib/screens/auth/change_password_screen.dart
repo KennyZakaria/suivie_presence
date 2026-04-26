@@ -42,7 +42,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString()), backgroundColor: AppTheme.error, behavior: SnackBarBehavior.floating),
+        SnackBar(
+            content: Text(e.toString()),
+            backgroundColor: AppTheme.error,
+            behavior: SnackBarBehavior.floating),
       );
     } finally {
       if (mounted) setState(() => _loading = false);
@@ -66,16 +69,31 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               padding: const EdgeInsets.all(24),
               child: Column(
                 children: [
-                  const Icon(Icons.lock_reset_rounded, size: 64, color: Colors.white),
+                  const Icon(Icons.lock_reset_rounded,
+                      size: 64, color: Colors.white),
                   const SizedBox(height: 16),
-                  const Text('Définir un nouveau mot de passe', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white)),
+                  const Text('Définir un nouveau mot de passe',
+                      style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white)),
                   const SizedBox(height: 8),
-                  Text('Bienvenue ! Veuillez définir un nouveau mot de passe pour continuer.', textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 13)),
+                  Text(
+                      'Bienvenue ! Veuillez définir un nouveau mot de passe pour continuer.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.white.withOpacity(0.8), fontSize: 13)),
                   const SizedBox(height: 32),
                   Container(
-                    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20),
-                        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.15), blurRadius: 30, offset: const Offset(0, 10))]),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.15),
+                              blurRadius: 30,
+                              offset: const Offset(0, 10))
+                        ]),
                     padding: const EdgeInsets.all(28),
                     child: Form(
                       key: _formKey,
@@ -89,12 +107,16 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                               labelText: 'Nouveau mot de passe',
                               prefixIcon: const Icon(Icons.lock_outline),
                               suffixIcon: IconButton(
-                                icon: Icon(_obscureNew ? Icons.visibility_outlined : Icons.visibility_off_outlined),
-                                onPressed: () => setState(() => _obscureNew = !_obscureNew),
+                                icon: Icon(_obscureNew
+                                    ? Icons.visibility_outlined
+                                    : Icons.visibility_off_outlined),
+                                onPressed: () =>
+                                    setState(() => _obscureNew = !_obscureNew),
                               ),
                             ),
                             validator: (v) {
-                              if (v == null || v.isEmpty) return 'Le mot de passe est requis';
+                              if (v == null || v.isEmpty)
+                                return 'Le mot de passe est requis';
                               if (v.length < 8) return 'Minimum 8 caractères';
                               return null;
                             },
@@ -107,13 +129,18 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                               labelText: 'Confirmer le mot de passe',
                               prefixIcon: const Icon(Icons.lock_outline),
                               suffixIcon: IconButton(
-                                icon: Icon(_obscureConfirm ? Icons.visibility_outlined : Icons.visibility_off_outlined),
-                                onPressed: () => setState(() => _obscureConfirm = !_obscureConfirm),
+                                icon: Icon(_obscureConfirm
+                                    ? Icons.visibility_outlined
+                                    : Icons.visibility_off_outlined),
+                                onPressed: () => setState(
+                                    () => _obscureConfirm = !_obscureConfirm),
                               ),
                             ),
                             validator: (v) {
-                              if (v == null || v.isEmpty) return 'Veuillez confirmer votre mot de passe';
-                              if (v != _newCtrl.text) return 'Les mots de passe ne correspondent pas';
+                              if (v == null || v.isEmpty)
+                                return 'Veuillez confirmer votre mot de passe';
+                              if (v != _newCtrl.text)
+                                return 'Les mots de passe ne correspondent pas';
                               return null;
                             },
                           ),
@@ -121,7 +148,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           ElevatedButton(
                             onPressed: _loading ? null : _submit,
                             child: _loading
-                                ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                                ? const SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(
+                                        color: Colors.white, strokeWidth: 2))
                                 : const Text('Définir et continuer'),
                           ),
                         ],

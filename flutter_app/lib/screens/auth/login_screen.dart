@@ -93,14 +93,22 @@ class _LoginScreenState extends State<LoginScreen> {
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(24),
-                      border: Border.all(color: Colors.white.withOpacity(0.3), width: 2),
+                      border: Border.all(
+                          color: Colors.white.withOpacity(0.3), width: 2),
                     ),
-                    child: const Icon(Icons.school_rounded, size: 48, color: Colors.white),
+                    child: const Icon(Icons.school_rounded,
+                        size: 48, color: Colors.white),
                   ),
                   const SizedBox(height: 20),
-                  const Text('SchoolTrack', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white)),
+                  const Text('SchoolTrack',
+                      style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white)),
                   const SizedBox(height: 4),
-                  Text('Système de gestion des présences', style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 13)),
+                  Text('Système de gestion des présences',
+                      style: TextStyle(
+                          color: Colors.white.withOpacity(0.8), fontSize: 13)),
                   const SizedBox(height: 40),
 
                   // Card
@@ -108,7 +116,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(20),
-                      boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.15), blurRadius: 30, offset: const Offset(0, 10))],
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black.withOpacity(0.15),
+                            blurRadius: 30,
+                            offset: const Offset(0, 10))
+                      ],
                     ),
                     padding: const EdgeInsets.all(28),
                     child: Form(
@@ -116,11 +129,16 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          const Text('Bienvenue', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppTheme.textPrimary)),
+                          const Text('Bienvenue',
+                              style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppTheme.textPrimary)),
                           const SizedBox(height: 4),
-                          const Text('Connectez-vous à votre compte', style: TextStyle(color: AppTheme.textSecondary, fontSize: 13)),
+                          const Text('Connectez-vous à votre compte',
+                              style: TextStyle(
+                                  color: AppTheme.textSecondary, fontSize: 13)),
                           const SizedBox(height: 24),
-
                           TextFormField(
                             controller: _emailCtrl,
                             keyboardType: TextInputType.emailAddress,
@@ -130,13 +148,14 @@ class _LoginScreenState extends State<LoginScreen> {
                               prefixIcon: Icon(Icons.email_outlined),
                             ),
                             validator: (v) {
-                              if (v == null || v.isEmpty) return 'L\'email est requis';
-                              if (!v.contains('@')) return 'Entrez un email valide';
+                              if (v == null || v.isEmpty)
+                                return 'L\'email est requis';
+                              if (!v.contains('@'))
+                                return 'Entrez un email valide';
                               return null;
                             },
                           ),
                           const SizedBox(height: 16),
-
                           TextFormField(
                             controller: _passwordCtrl,
                             obscureText: _obscure,
@@ -146,18 +165,26 @@ class _LoginScreenState extends State<LoginScreen> {
                               labelText: 'Mot de passe',
                               prefixIcon: const Icon(Icons.lock_outline),
                               suffixIcon: IconButton(
-                                icon: Icon(_obscure ? Icons.visibility_outlined : Icons.visibility_off_outlined),
-                                onPressed: () => setState(() => _obscure = !_obscure),
+                                icon: Icon(_obscure
+                                    ? Icons.visibility_outlined
+                                    : Icons.visibility_off_outlined),
+                                onPressed: () =>
+                                    setState(() => _obscure = !_obscure),
                               ),
                             ),
-                            validator: (v) => (v == null || v.isEmpty) ? 'Le mot de passe est requis' : null,
+                            validator: (v) => (v == null || v.isEmpty)
+                                ? 'Le mot de passe est requis'
+                                : null,
                           ),
                           const SizedBox(height: 24),
-
                           ElevatedButton(
                             onPressed: _loading ? null : _login,
                             child: _loading
-                                ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                                ? const SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(
+                                        color: Colors.white, strokeWidth: 2))
                                 : const Text('Se connecter'),
                           ),
                         ],

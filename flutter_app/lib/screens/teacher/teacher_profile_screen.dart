@@ -18,24 +18,42 @@ class TeacherProfileScreen extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              gradient: const LinearGradient(colors: [Color(0xFF4F46E5), Color(0xFF7C3AED)]),
+              gradient: const LinearGradient(
+                  colors: [Color(0xFF4F46E5), Color(0xFF7C3AED)]),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Column(children: [
               CircleAvatar(
                 radius: 40,
                 backgroundColor: Colors.white.withOpacity(0.2),
-                child: Text(user?.initials ?? '?', style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white)),
+                child: Text(user?.initials ?? '?',
+                    style: const TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white)),
               ),
               const SizedBox(height: 12),
-              Text(user?.fullName ?? '', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white)),
+              Text(user?.fullName ?? '',
+                  style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white)),
               const SizedBox(height: 4),
-              Text(user?.email ?? '', style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 13)),
+              Text(user?.email ?? '',
+                  style: TextStyle(
+                      color: Colors.white.withOpacity(0.8), fontSize: 13)),
               const SizedBox(height: 8),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(20)),
-                child: const Text('Enseignant', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600)),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(20)),
+                child: const Text('Enseignant',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600)),
               ),
             ]),
           ),
@@ -43,13 +61,25 @@ class TeacherProfileScreen extends StatelessWidget {
 
           // Info card
           Container(
-            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), border: Border.all(color: AppTheme.border)),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: AppTheme.border)),
             child: Column(children: [
-              _InfoRow(icon: Icons.email_outlined, label: 'Email', value: user?.email ?? '—'),
+              _InfoRow(
+                  icon: Icons.email_outlined,
+                  label: 'Email',
+                  value: user?.email ?? '—'),
               const Divider(height: 1, indent: 48),
-              _InfoRow(icon: Icons.phone_outlined, label: 'Téléphone', value: user?.phone ?? '—'),
+              _InfoRow(
+                  icon: Icons.phone_outlined,
+                  label: 'Téléphone',
+                  value: user?.phone ?? '—'),
               const Divider(height: 1, indent: 48),
-              _InfoRow(icon: Icons.class_outlined, label: 'Classes', value: '${user?.classIds.length ?? 0} assignée(s)'),
+              _InfoRow(
+                  icon: Icons.class_outlined,
+                  label: 'Classes',
+                  value: '${user?.classIds.length ?? 0} assignée(s)'),
             ]),
           ),
           const SizedBox(height: 16),
@@ -65,17 +95,23 @@ class TeacherProfileScreen extends StatelessWidget {
                   context: context,
                   builder: (_) => AlertDialog(
                     title: const Text('Déconnexion'),
-                    content: const Text('Êtes-vous sûr de vouloir vous déconnecter ?'),
+                    content: const Text(
+                        'Êtes-vous sûr de vouloir vous déconnecter ?'),
                     actions: [
-                      TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Annuler')),
-                      TextButton(onPressed: () => Navigator.pop(context, true),
-                          child: const Text('Se déconnecter', style: TextStyle(color: AppTheme.error))),
+                      TextButton(
+                          onPressed: () => Navigator.pop(context, false),
+                          child: const Text('Annuler')),
+                      TextButton(
+                          onPressed: () => Navigator.pop(context, true),
+                          child: const Text('Se déconnecter',
+                              style: TextStyle(color: AppTheme.error))),
                     ],
                   ),
                 );
                 if (confirm == true && context.mounted) {
                   await context.read<AuthProvider>().logout();
-                  Navigator.pushNamedAndRemoveUntil(context, '/login', (_) => false);
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, '/login', (_) => false);
                 }
               },
               child: const Padding(
@@ -83,7 +119,11 @@ class TeacherProfileScreen extends StatelessWidget {
                 child: Row(children: [
                   Icon(Icons.logout_rounded, color: AppTheme.error),
                   SizedBox(width: 12),
-                  Text('Se déconnecter', style: TextStyle(color: AppTheme.error, fontWeight: FontWeight.w600, fontSize: 15)),
+                  Text('Se déconnecter',
+                      style: TextStyle(
+                          color: AppTheme.error,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 15)),
                 ]),
               ),
             ),
@@ -95,17 +135,26 @@ class TeacherProfileScreen extends StatelessWidget {
 }
 
 class _InfoRow extends StatelessWidget {
-  final IconData icon; final String label; final String value;
-  const _InfoRow({required this.icon, required this.label, required this.value});
+  final IconData icon;
+  final String label;
+  final String value;
+  const _InfoRow(
+      {required this.icon, required this.label, required this.value});
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-    child: Row(children: [
-      Icon(icon, color: AppTheme.textSecondary, size: 20),
-      const SizedBox(width: 12),
-      Text('$label  ', style: const TextStyle(color: AppTheme.textSecondary, fontSize: 13)),
-      Expanded(child: Text(value, textAlign: TextAlign.right, style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14))),
-    ]),
-  );
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        child: Row(children: [
+          Icon(icon, color: AppTheme.textSecondary, size: 20),
+          const SizedBox(width: 12),
+          Text('$label  ',
+              style:
+                  const TextStyle(color: AppTheme.textSecondary, fontSize: 13)),
+          Expanded(
+              child: Text(value,
+                  textAlign: TextAlign.right,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w500, fontSize: 14))),
+        ]),
+      );
 }

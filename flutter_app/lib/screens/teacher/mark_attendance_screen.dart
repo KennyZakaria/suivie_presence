@@ -12,7 +12,8 @@ class MarkAttendanceScreen extends StatefulWidget {
   final ClassModel classModel;
   final List<UserModel> students;
 
-  const MarkAttendanceScreen({super.key, required this.classModel, required this.students});
+  const MarkAttendanceScreen(
+      {super.key, required this.classModel, required this.students});
 
   @override
   State<MarkAttendanceScreen> createState() => _MarkAttendanceScreenState();
@@ -30,7 +31,9 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
   void initState() {
     super.initState();
     _selectedDate = DateTime.now();
-    _entries = widget.students.map((s) => BulkAttendanceEntry(studentId: s.id)).toList();
+    _entries = widget.students
+        .map((s) => BulkAttendanceEntry(studentId: s.id))
+        .toList();
     for (final s in widget.students) {
       _noteControllers[s.id] = TextEditingController();
       _noteExpanded[s.id] = false;
@@ -51,7 +54,8 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
   }
 
   void _setAllPresent() {
-    setState(() => _entries.forEach((e) => e.status = AttendanceStatus.present));
+    setState(
+        () => _entries.forEach((e) => e.status = AttendanceStatus.present));
   }
 
   Future<void> _pickDate() async {
@@ -72,7 +76,8 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
     try {
       for (final e in _entries) {
         e.notes = _noteControllers[e.studentId]?.text.isEmpty == true
-            ? null : _noteControllers[e.studentId]?.text;
+            ? null
+            : _noteControllers[e.studentId]?.text;
       }
       final teacherId = context.read<AuthProvider>().user!.id;
       await _service.bulkMarkAttendance(
@@ -82,13 +87,19 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
       );
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Présences enregistrées !'), backgroundColor: AppTheme.success, behavior: SnackBarBehavior.floating),
+        const SnackBar(
+            content: Text('Présences enregistrées !'),
+            backgroundColor: AppTheme.success,
+            behavior: SnackBarBehavior.floating),
       );
       Navigator.pop(context, true);
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString()), backgroundColor: AppTheme.error, behavior: SnackBarBehavior.floating),
+        SnackBar(
+            content: Text(e.toString()),
+            backgroundColor: AppTheme.error,
+            behavior: SnackBarBehavior.floating),
       );
     } finally {
       if (mounted) setState(() => _loading = false);
@@ -97,9 +108,12 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final presentCount = _entries.where((e) => e.status == AttendanceStatus.present).length;
-    final absentCount = _entries.where((e) => e.status == AttendanceStatus.absent).length;
-    final lateCount   = _entries.where((e) => e.status == AttendanceStatus.late).length;
+    final presentCount =
+        _entries.where((e) => e.status == AttendanceStatus.present).length;
+    final absentCount =
+        _entries.where((e) => e.status == AttendanceStatus.absent).length;
+    final lateCount =
+        _entries.where((e) => e.status == AttendanceStatus.late).length;
 
     return Scaffold(
       backgroundColor: AppTheme.background,
@@ -108,7 +122,9 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
         actions: [
           TextButton(
             onPressed: _setAllPresent,
-            child: const Text('Tous présents', style: TextStyle(color: AppTheme.primary, fontWeight: FontWeight.w600)),
+            child: const Text('Tous présents',
+                style: TextStyle(
+                    color: AppTheme.primary, fontWeight: FontWeight.w600)),
           ),
         ],
       ),
@@ -123,26 +139,45 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
               GestureDetector(
                 onTap: _pickDate,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                  decoration: BoxDecoration(color: AppTheme.primaryLight, borderRadius: BorderRadius.circular(10)),
-                  child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                    const Icon(Icons.calendar_today, size: 18, color: AppTheme.primary),
-                    const SizedBox(width: 8),
-                    Text(formatDateForDisplay(_selectedDate),
-                        style: const TextStyle(color: AppTheme.primary, fontWeight: FontWeight.w600, fontSize: 15)),
-                    const SizedBox(width: 8),
-                    const Icon(Icons.expand_more, size: 18, color: AppTheme.primary),
-                  ]),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  decoration: BoxDecoration(
+                      color: AppTheme.primaryLight,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.calendar_today,
+                            size: 18, color: AppTheme.primary),
+                        const SizedBox(width: 8),
+                        Text(formatDateForDisplay(_selectedDate),
+                            style: const TextStyle(
+                                color: AppTheme.primary,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15)),
+                        const SizedBox(width: 8),
+                        const Icon(Icons.expand_more,
+                            size: 18, color: AppTheme.primary),
+                      ]),
                 ),
               ),
               const SizedBox(height: 12),
               // Summary counts
               Row(children: [
-                _CountChip(count: presentCount, label: 'Présents', color: AppTheme.success),
+                _CountChip(
+                    count: presentCount,
+                    label: 'Présents',
+                    color: AppTheme.success),
                 const SizedBox(width: 8),
-                _CountChip(count: absentCount, label: 'Absents', color: AppTheme.error),
+                _CountChip(
+                    count: absentCount,
+                    label: 'Absents',
+                    color: AppTheme.error),
                 const SizedBox(width: 8),
-                _CountChip(count: lateCount, label: 'En retard', color: AppTheme.warning),
+                _CountChip(
+                    count: lateCount,
+                    label: 'En retard',
+                    color: AppTheme.warning),
               ]),
             ]),
           ),
@@ -150,14 +185,17 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
           // Student list
           Expanded(
             child: widget.students.isEmpty
-                ? const Center(child: Text('Aucun élève dans cette classe', style: TextStyle(color: AppTheme.textSecondary)))
+                ? const Center(
+                    child: Text('Aucun élève dans cette classe',
+                        style: TextStyle(color: AppTheme.textSecondary)))
                 : ListView.separated(
                     padding: const EdgeInsets.all(16),
                     itemCount: widget.students.length,
                     separatorBuilder: (_, __) => const SizedBox(height: 10),
                     itemBuilder: (_, i) {
                       final student = widget.students[i];
-                      final entry = _entries.firstWhere((e) => e.studentId == student.id);
+                      final entry =
+                          _entries.firstWhere((e) => e.studentId == student.id);
                       final noteExpanded = _noteExpanded[student.id] ?? false;
 
                       return Container(
@@ -174,37 +212,56 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
                               CircleAvatar(
                                 backgroundColor: AppTheme.primaryLight,
                                 child: Text(student.initials,
-                                    style: const TextStyle(color: AppTheme.primary, fontWeight: FontWeight.bold, fontSize: 12)),
+                                    style: const TextStyle(
+                                        color: AppTheme.primary,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12)),
                               ),
                               const SizedBox(width: 12),
                               // Name
-                              Expanded(child: Text(student.fullName,
-                                  style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14))),
+                              Expanded(
+                                  child: Text(student.fullName,
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 14))),
                               // Status buttons
                               Row(children: [
                                 _StatusButton(
-                                  label: 'P', color: AppTheme.success,
-                                  selected: entry.status == AttendanceStatus.present,
-                                  onTap: () => _setStatus(student.id, AttendanceStatus.present),
+                                  label: 'P',
+                                  color: AppTheme.success,
+                                  selected:
+                                      entry.status == AttendanceStatus.present,
+                                  onTap: () => _setStatus(
+                                      student.id, AttendanceStatus.present),
                                 ),
                                 const SizedBox(width: 6),
                                 _StatusButton(
-                                  label: 'L', color: AppTheme.warning,
-                                  selected: entry.status == AttendanceStatus.late,
-                                  onTap: () => _setStatus(student.id, AttendanceStatus.late),
+                                  label: 'L',
+                                  color: AppTheme.warning,
+                                  selected:
+                                      entry.status == AttendanceStatus.late,
+                                  onTap: () => _setStatus(
+                                      student.id, AttendanceStatus.late),
                                 ),
                                 const SizedBox(width: 6),
                                 _StatusButton(
-                                  label: 'A', color: AppTheme.error,
-                                  selected: entry.status == AttendanceStatus.absent,
-                                  onTap: () => _setStatus(student.id, AttendanceStatus.absent),
+                                  label: 'A',
+                                  color: AppTheme.error,
+                                  selected:
+                                      entry.status == AttendanceStatus.absent,
+                                  onTap: () => _setStatus(
+                                      student.id, AttendanceStatus.absent),
                                 ),
                                 // Note toggle
                                 const SizedBox(width: 8),
                                 GestureDetector(
-                                  onTap: () => setState(() => _noteExpanded[student.id] = !noteExpanded),
+                                  onTap: () => setState(() =>
+                                      _noteExpanded[student.id] =
+                                          !noteExpanded),
                                   child: Icon(
-                                    noteExpanded ? Icons.note_outlined : Icons.note_add_outlined,
+                                    noteExpanded
+                                        ? Icons.note_outlined
+                                        : Icons.note_add_outlined,
                                     size: 20,
                                     color: AppTheme.textSecondary,
                                   ),
@@ -222,7 +279,8 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
                                   hintText: 'Add a note (optional)...',
                                   hintStyle: TextStyle(fontSize: 13),
                                   isDense: true,
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 10),
                                 ),
                                 style: const TextStyle(fontSize: 13),
                                 maxLines: 2,
@@ -240,11 +298,17 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
           padding: const EdgeInsets.all(16),
           child: ElevatedButton(
             onPressed: _loading ? null : _submit,
-            style: ElevatedButton.styleFrom(minimumSize: const Size.fromHeight(52)),
+            style: ElevatedButton.styleFrom(
+                minimumSize: const Size.fromHeight(52)),
             child: _loading
-                ? const SizedBox(height: 22, width: 22, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                ? const SizedBox(
+                    height: 22,
+                    width: 22,
+                    child: CircularProgressIndicator(
+                        color: Colors.white, strokeWidth: 2))
                 : Text('Save Attendance · ${widget.students.length} students',
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w600)),
           ),
         ),
       ),
@@ -258,7 +322,11 @@ class _StatusButton extends StatelessWidget {
   final bool selected;
   final VoidCallback onTap;
 
-  const _StatusButton({required this.label, required this.color, required this.selected, required this.onTap});
+  const _StatusButton(
+      {required this.label,
+      required this.color,
+      required this.selected,
+      required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -266,18 +334,21 @@ class _StatusButton extends StatelessWidget {
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
-        width: 34, height: 34,
+        width: 34,
+        height: 34,
         decoration: BoxDecoration(
           color: selected ? color : color.withOpacity(0.08),
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: selected ? color : color.withOpacity(0.3), width: 1.5),
+          border: Border.all(
+              color: selected ? color : color.withOpacity(0.3), width: 1.5),
         ),
         child: Center(
-          child: Text(label, style: TextStyle(
-            color: selected ? Colors.white : color,
-            fontWeight: FontWeight.bold,
-            fontSize: 13,
-          )),
+          child: Text(label,
+              style: TextStyle(
+                color: selected ? Colors.white : color,
+                fontWeight: FontWeight.bold,
+                fontSize: 13,
+              )),
         ),
       ),
     );
@@ -289,19 +360,25 @@ class _CountChip extends StatelessWidget {
   final String label;
   final Color color;
 
-  const _CountChip({required this.count, required this.label, required this.color});
+  const _CountChip(
+      {required this.count, required this.label, required this.color});
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(child: Container(
+    return Expanded(
+        child: Container(
       padding: const EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
         color: color.withOpacity(0.08),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(children: [
-        Text('$count', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: color)),
-        Text(label, style: TextStyle(fontSize: 11, color: color, fontWeight: FontWeight.w500)),
+        Text('$count',
+            style: TextStyle(
+                fontSize: 20, fontWeight: FontWeight.bold, color: color)),
+        Text(label,
+            style: TextStyle(
+                fontSize: 11, color: color, fontWeight: FontWeight.w500)),
       ]),
     ));
   }
