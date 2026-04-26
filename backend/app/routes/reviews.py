@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from app.services.review_service import (
     create_comment, create_conseil_discipline,
     create_review, get_all_reviews, get_reviews_by_student,
-    get_reviews_by_teacher, resolve_review, get_review_stats,
+    get_reviews_by_teacher, resolve_review, unresolve_review, get_review_stats,
 )
 from app.models.review import ReviewCreate, CommentCreate, ConseilDisciplineCreate
 from app.middleware.auth import get_current_user, require_teacher, require_admin
@@ -97,3 +97,11 @@ async def resolve_review_endpoint(
     _: dict = Depends(require_teacher),
 ):
     return await resolve_review(review_id)
+
+
+@router.put("/{review_id}/unresolve")
+async def unresolve_review_endpoint(
+    review_id: str,
+    _: dict = Depends(require_admin),
+):
+    return await unresolve_review(review_id)

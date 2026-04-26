@@ -157,6 +157,23 @@ async def resolve_review(review_id: str) -> dict:
     return updated
 
 
+async def unresolve_review(review_id: str) -> dict:
+    db = get_db()
+    doc = db.collection("reviews").document(review_id).get()
+    if not doc.exists:
+        raise HTTPException(status_code=404, detail="Review not found")
+
+    now = datetime.utcnow().isoformat()
+    db.collection("reviews").document(review_id).update({
+        "is_resolved": False,
+        "resolved_at": None,
+        "updated_at": now,
+    })
+    updated = db.collection("reviews").document(review_id).get().to_dict()
+    updated["id"] = review_id
+    return updated
+
+
 async def get_review_stats() -> dict:
     db = get_db()
     docs = db.collection("reviews").get()

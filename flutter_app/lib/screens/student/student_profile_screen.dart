@@ -32,7 +32,7 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
       setState(() => _changingPassword = false);
       _oldCtrl.clear(); _newCtrl.clear(); _confirmCtrl.clear();
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Password changed successfully'), backgroundColor: AppTheme.success, behavior: SnackBarBehavior.floating),
+        const SnackBar(content: Text('Mot de passe modifié avec succès'), backgroundColor: AppTheme.success, behavior: SnackBarBehavior.floating),
       );
     } catch (e) {
       if (!mounted) return;
@@ -47,7 +47,7 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
     final user = context.watch<AuthProvider>().user;
     return Scaffold(
       backgroundColor: AppTheme.background,
-      appBar: AppBar(title: const Text('My Profile')),
+      appBar: AppBar(title: const Text('Mon profil')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(children: [
@@ -72,7 +72,7 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                 decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(20)),
-                child: const Text('Student', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600)),
+                child: const Text('Étudiant', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600)),
               ),
             ]),
           ),
@@ -84,9 +84,9 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
             child: Column(children: [
               _InfoRow(icon: Icons.email_outlined, label: 'Email', value: user?.email ?? '—'),
               const Divider(height: 1, indent: 48),
-              _InfoRow(icon: Icons.phone_outlined, label: 'Phone', value: user?.phone ?? '—'),
+              _InfoRow(icon: Icons.phone_outlined, label: 'Téléphone', value: user?.phone ?? '—'),
               const Divider(height: 1, indent: 48),
-              _InfoRow(icon: Icons.class_outlined, label: 'Classes', value: '${user?.classIds.length ?? 0} enrolled'),
+              _InfoRow(icon: Icons.class_outlined, label: 'Classes', value: '${user?.classIds.length ?? 0} inscrite(s)'),
             ]),
           ),
           const SizedBox(height: 16),
@@ -104,7 +104,7 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
                   child: Row(children: [
                     const Icon(Icons.lock_outline, color: AppTheme.primary),
                     const SizedBox(width: 12),
-                    const Expanded(child: Text('Change Password', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15))),
+                    const Expanded(child: Text('Changer le mot de passe', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15))),
                     Icon(_changingPassword ? Icons.expand_less : Icons.expand_more, color: AppTheme.textSecondary),
                   ]),
                 ),
@@ -119,24 +119,24 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
                       const SizedBox(height: 16),
                       TextFormField(
                         controller: _oldCtrl, obscureText: true,
-                        decoration: const InputDecoration(labelText: 'Current Password', isDense: true),
-                        validator: (v) => (v == null || v.isEmpty) ? 'Required' : null,
+                        decoration: const InputDecoration(labelText: 'Mot de passe actuel', isDense: true),
+                        validator: (v) => (v == null || v.isEmpty) ? 'Requis' : null,
                       ),
                       const SizedBox(height: 12),
                       TextFormField(
                         controller: _newCtrl, obscureText: true,
-                        decoration: const InputDecoration(labelText: 'New Password', isDense: true),
+                        decoration: const InputDecoration(labelText: 'Nouveau mot de passe', isDense: true),
                         validator: (v) {
-                          if (v == null || v.isEmpty) return 'Required';
-                          if (v.length < 8) return 'Min 8 characters';
+                          if (v == null || v.isEmpty) return 'Requis';
+                          if (v.length < 8) return 'Min 8 caractères';
                           return null;
                         },
                       ),
                       const SizedBox(height: 12),
                       TextFormField(
                         controller: _confirmCtrl, obscureText: true,
-                        decoration: const InputDecoration(labelText: 'Confirm Password', isDense: true),
-                        validator: (v) => v != _newCtrl.text ? 'Passwords do not match' : null,
+                        decoration: const InputDecoration(labelText: 'Confirmer le mot de passe', isDense: true),
+                        validator: (v) => v != _newCtrl.text ? 'Les mots de passe ne correspondent pas' : null,
                       ),
                       const SizedBox(height: 16),
                       SizedBox(width: double.infinity, child: ElevatedButton(
@@ -161,12 +161,12 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
                 final confirm = await showDialog<bool>(
                   context: context,
                   builder: (_) => AlertDialog(
-                    title: const Text('Sign Out'),
-                    content: const Text('Are you sure you want to sign out?'),
+                    title: const Text('Déconnexion'),
+                    content: const Text('Êtes-vous sûr de vouloir vous déconnecter ?'),
                     actions: [
-                      TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
+                      TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Annuler')),
                       TextButton(onPressed: () => Navigator.pop(context, true),
-                          child: const Text('Sign Out', style: TextStyle(color: AppTheme.error))),
+                          child: const Text('Se déconnecter', style: TextStyle(color: AppTheme.error))),
                     ],
                   ),
                 );
@@ -180,7 +180,7 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
                 child: Row(children: [
                   Icon(Icons.logout_rounded, color: AppTheme.error),
                   SizedBox(width: 12),
-                  Text('Sign Out', style: TextStyle(color: AppTheme.error, fontWeight: FontWeight.w600, fontSize: 15)),
+                  Text('Se déconnecter', style: TextStyle(color: AppTheme.error, fontWeight: FontWeight.w600, fontSize: 15)),
                 ]),
               ),
             ),

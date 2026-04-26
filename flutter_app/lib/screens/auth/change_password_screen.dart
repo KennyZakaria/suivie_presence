@@ -68,9 +68,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 children: [
                   const Icon(Icons.lock_reset_rounded, size: 64, color: Colors.white),
                   const SizedBox(height: 16),
-                  const Text('Set New Password', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white)),
+                  const Text('Définir un nouveau mot de passe', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white)),
                   const SizedBox(height: 8),
-                  Text('Welcome! Please set a new password to continue.', textAlign: TextAlign.center,
+                  Text('Bienvenue ! Veuillez définir un nouveau mot de passe pour continuer.', textAlign: TextAlign.center,
                       style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 13)),
                   const SizedBox(height: 32),
                   Container(
@@ -86,7 +86,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                             controller: _newCtrl,
                             obscureText: _obscureNew,
                             decoration: InputDecoration(
-                              labelText: 'New Password',
+                              labelText: 'Nouveau mot de passe',
                               prefixIcon: const Icon(Icons.lock_outline),
                               suffixIcon: IconButton(
                                 icon: Icon(_obscureNew ? Icons.visibility_outlined : Icons.visibility_off_outlined),
@@ -94,8 +94,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                               ),
                             ),
                             validator: (v) {
-                              if (v == null || v.isEmpty) return 'Password is required';
-                              if (v.length < 8) return 'Minimum 8 characters';
+                              if (v == null || v.isEmpty) return 'Le mot de passe est requis';
+                              if (v.length < 8) return 'Minimum 8 caractères';
                               return null;
                             },
                           ),
@@ -104,7 +104,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                             controller: _confirmCtrl,
                             obscureText: _obscureConfirm,
                             decoration: InputDecoration(
-                              labelText: 'Confirm Password',
+                              labelText: 'Confirmer le mot de passe',
                               prefixIcon: const Icon(Icons.lock_outline),
                               suffixIcon: IconButton(
                                 icon: Icon(_obscureConfirm ? Icons.visibility_outlined : Icons.visibility_off_outlined),
@@ -112,8 +112,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                               ),
                             ),
                             validator: (v) {
-                              if (v == null || v.isEmpty) return 'Please confirm your password';
-                              if (v != _newCtrl.text) return 'Passwords do not match';
+                              if (v == null || v.isEmpty) return 'Veuillez confirmer votre mot de passe';
+                              if (v != _newCtrl.text) return 'Les mots de passe ne correspondent pas';
                               return null;
                             },
                           ),
@@ -122,7 +122,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                             onPressed: _loading ? null : _submit,
                             child: _loading
                                 ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-                                : const Text('Set Password & Continue'),
+                                : const Text('Définir et continuer'),
                           ),
                         ],
                       ),

@@ -100,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 20),
                   const Text('SchoolTrack', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white)),
                   const SizedBox(height: 4),
-                  Text('Attendance Management System', style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 13)),
+                  Text('Système de gestion des présences', style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 13)),
                   const SizedBox(height: 40),
 
                   // Card
@@ -116,9 +116,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          const Text('Welcome Back', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppTheme.textPrimary)),
+                          const Text('Bienvenue', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppTheme.textPrimary)),
                           const SizedBox(height: 4),
-                          const Text('Sign in to your account', style: TextStyle(color: AppTheme.textSecondary, fontSize: 13)),
+                          const Text('Connectez-vous à votre compte', style: TextStyle(color: AppTheme.textSecondary, fontSize: 13)),
                           const SizedBox(height: 24),
 
                           TextFormField(
@@ -126,12 +126,12 @@ class _LoginScreenState extends State<LoginScreen> {
                             keyboardType: TextInputType.emailAddress,
                             textInputAction: TextInputAction.next,
                             decoration: const InputDecoration(
-                              labelText: 'Email Address',
+                              labelText: 'Adresse email',
                               prefixIcon: Icon(Icons.email_outlined),
                             ),
                             validator: (v) {
-                              if (v == null || v.isEmpty) return 'Email is required';
-                              if (!v.contains('@')) return 'Enter a valid email';
+                              if (v == null || v.isEmpty) return 'L\'email est requis';
+                              if (!v.contains('@')) return 'Entrez un email valide';
                               return null;
                             },
                           ),
@@ -143,14 +143,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             textInputAction: TextInputAction.done,
                             onFieldSubmitted: (_) => _login(),
                             decoration: InputDecoration(
-                              labelText: 'Password',
+                              labelText: 'Mot de passe',
                               prefixIcon: const Icon(Icons.lock_outline),
                               suffixIcon: IconButton(
                                 icon: Icon(_obscure ? Icons.visibility_outlined : Icons.visibility_off_outlined),
                                 onPressed: () => setState(() => _obscure = !_obscure),
                               ),
                             ),
-                            validator: (v) => (v == null || v.isEmpty) ? 'Password is required' : null,
+                            validator: (v) => (v == null || v.isEmpty) ? 'Le mot de passe est requis' : null,
                           ),
                           const SizedBox(height: 24),
 
@@ -158,7 +158,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             onPressed: _loading ? null : _login,
                             child: _loading
                                 ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-                                : const Text('Sign In'),
+                                : const Text('Se connecter'),
                           ),
                         ],
                       ),

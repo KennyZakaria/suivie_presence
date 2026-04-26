@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ConfirmDialog = ({ isOpen, title, message, onConfirm, onCancel, confirmLabel = 'Confirm', confirmVariant = 'danger', loading = false }) => {
+const ConfirmDialog = ({ isOpen, title, message, onConfirm, onCancel, confirmLabel = 'Confirmer', confirmVariant = 'danger', loading = false }) => {
   if (!isOpen) return null;
 
   return (
@@ -14,7 +14,7 @@ const ConfirmDialog = ({ isOpen, title, message, onConfirm, onCancel, confirmLab
             onClick={onCancel}
             className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition"
           >
-            Cancel
+            Annuler
           </button>
           <button
             onClick={onConfirm}
@@ -25,7 +25,7 @@ const ConfirmDialog = ({ isOpen, title, message, onConfirm, onCancel, confirmLab
                 : 'bg-indigo-600 hover:bg-indigo-700'
             }`}
           >
-            {loading ? 'Processing...' : confirmLabel}
+            {loading ? 'Traitement...' : confirmLabel}
           </button>
         </div>
       </div>

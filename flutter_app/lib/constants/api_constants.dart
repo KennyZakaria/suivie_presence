@@ -7,6 +7,7 @@ class ApiConstants {
   static const String baseUrl = "https://suivie-presence.onrender.com/api/v1";
   // Auth
   static const String login = '/auth/login';
+  static const String logout = '/auth/logout';
   static const String me = '/auth/me';
   static const String changePassword = '/auth/change-password';
   static const String forceChangePassword = '/auth/force-change-password';

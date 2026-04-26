@@ -11,7 +11,7 @@ class TeacherProfileScreen extends StatelessWidget {
     final user = context.watch<AuthProvider>().user;
     return Scaffold(
       backgroundColor: AppTheme.background,
-      appBar: AppBar(title: const Text('Profile')),
+      appBar: AppBar(title: const Text('Profil')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(children: [
@@ -35,7 +35,7 @@ class TeacherProfileScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                 decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(20)),
-                child: const Text('Teacher', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600)),
+                child: const Text('Enseignant', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600)),
               ),
             ]),
           ),
@@ -47,9 +47,9 @@ class TeacherProfileScreen extends StatelessWidget {
             child: Column(children: [
               _InfoRow(icon: Icons.email_outlined, label: 'Email', value: user?.email ?? '—'),
               const Divider(height: 1, indent: 48),
-              _InfoRow(icon: Icons.phone_outlined, label: 'Phone', value: user?.phone ?? '—'),
+              _InfoRow(icon: Icons.phone_outlined, label: 'Téléphone', value: user?.phone ?? '—'),
               const Divider(height: 1, indent: 48),
-              _InfoRow(icon: Icons.class_outlined, label: 'Classes', value: '${user?.classIds.length ?? 0} assigned'),
+              _InfoRow(icon: Icons.class_outlined, label: 'Classes', value: '${user?.classIds.length ?? 0} assignée(s)'),
             ]),
           ),
           const SizedBox(height: 16),
@@ -64,12 +64,12 @@ class TeacherProfileScreen extends StatelessWidget {
                 final confirm = await showDialog<bool>(
                   context: context,
                   builder: (_) => AlertDialog(
-                    title: const Text('Sign Out'),
-                    content: const Text('Are you sure you want to sign out?'),
+                    title: const Text('Déconnexion'),
+                    content: const Text('Êtes-vous sûr de vouloir vous déconnecter ?'),
                     actions: [
-                      TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
+                      TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Annuler')),
                       TextButton(onPressed: () => Navigator.pop(context, true),
-                          child: const Text('Sign Out', style: TextStyle(color: AppTheme.error))),
+                          child: const Text('Se déconnecter', style: TextStyle(color: AppTheme.error))),
                     ],
                   ),
                 );
@@ -83,7 +83,7 @@ class TeacherProfileScreen extends StatelessWidget {
                 child: Row(children: [
                   Icon(Icons.logout_rounded, color: AppTheme.error),
                   SizedBox(width: 12),
-                  Text('Sign Out', style: TextStyle(color: AppTheme.error, fontWeight: FontWeight.w600, fontSize: 15)),
+                  Text('Se déconnecter', style: TextStyle(color: AppTheme.error, fontWeight: FontWeight.w600, fontSize: 15)),
                 ]),
               ),
             ),

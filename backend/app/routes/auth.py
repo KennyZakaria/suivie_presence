@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from app.services.auth_service import login_user, change_password, force_change_password
 from app.services.user_service import update_fcm_token
+from app.services.activity_service import record_logout
 from app.middleware.auth import get_current_user
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -25,9 +26,19 @@ class FCMTokenRequest(BaseModel):
     fcm_token: str
 
 
+class LogoutRequest(BaseModel):
+    session_id: str
+
+
 @router.post("/login")
 async def login(data: LoginRequest):
     return await login_user(data.email, data.password)
+
+
+@router.post("/logout")
+async def logout(data: LogoutRequest, current_user: dict = Depends(get_current_user)):
+    await record_logout(current_user["id"], data.session_id)
+    return {"message": "Logged out"}
 
 
 @router.get("/me")

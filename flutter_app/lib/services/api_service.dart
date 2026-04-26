@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import '../constants/api_constants.dart';
 import '../main.dart';
 import '../utils/secure_storage.dart';
@@ -40,13 +41,13 @@ class ApiService {
       SecureStorage.clear();
       navigatorKey.currentState
           ?.pushNamedAndRemoveUntil('/login', (_) => false);
-      throw ApiException('Session expired. Please log in again.',
+      throw ApiException('Session expirée. Veuillez vous reconnecter.',
           statusCode: 401);
     }
     final body = jsonDecode(res.body);
     if (res.statusCode >= 200 && res.statusCode < 300) return body;
     final detail =
-        body is Map ? (body['detail'] ?? 'Request failed') : 'Request failed';
+        body is Map ? (body['detail'] ?? 'Requête échouée') : 'Requête échouée';
     throw ApiException(detail.toString(), statusCode: res.statusCode);
   }
 
@@ -88,14 +89,14 @@ class ApiService {
       SecureStorage.clear();
       navigatorKey.currentState
           ?.pushNamedAndRemoveUntil('/login', (_) => false);
-      throw ApiException('Session expired. Please log in again.',
+      throw ApiException('Session expirée. Veuillez vous reconnecter.',
           statusCode: 401);
     }
     final decoded = jsonDecode(body);
     if (res.statusCode >= 200 && res.statusCode < 300) return decoded;
     final detail = decoded is Map
-        ? (decoded['detail'] ?? 'Request failed')
-        : 'Request failed';
+        ? (decoded['detail'] ?? 'Requête échouée')
+        : 'Requête échouée';
     throw ApiException(detail.toString(), statusCode: res.statusCode);
   }
 
@@ -111,10 +112,20 @@ class ApiService {
     if (token != null) request.headers['Authorization'] = 'Bearer $token';
     request.fields.addAll(fields);
     if (fileBytes != null) {
+      final name = fileName ?? 'document.jpg';
+      final ext = name.split('.').last.toLowerCase();
+      final mime = switch (ext) {
+        'jpg' || 'jpeg' => MediaType('image', 'jpeg'),
+        'png'           => MediaType('image', 'png'),
+        'webp'          => MediaType('image', 'webp'),
+        'pdf'           => MediaType('application', 'pdf'),
+        _               => MediaType('image', 'jpeg'),
+      };
       request.files.add(http.MultipartFile.fromBytes(
         fileField,
         fileBytes,
-        filename: fileName ?? 'document.jpg',
+        filename: name,
+        contentType: mime,
       ));
     }
     final streamed = await request.send().timeout(const Duration(seconds: 30));

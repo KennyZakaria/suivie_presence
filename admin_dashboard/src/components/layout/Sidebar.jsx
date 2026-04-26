@@ -8,6 +8,7 @@ import {
   MdAssignment,
   MdGavel,
   MdDescription,
+  MdHistory,
   MdLogout,
 } from 'react-icons/md';
 import { useAuth } from '../../hooks/useAuth';
@@ -20,6 +21,7 @@ const navItems = [
   { to: '/attendance', label: 'Rapports de présence', icon: MdAssignment },
   { to: '/reviews', label: 'Avis disciplinaires', icon: MdGavel },
   { to: '/justifications', label: 'Justifications', icon: MdDescription },
+  { to: '/activity', label: "Journal d'activité", icon: MdHistory },
 ];
 
 function Sidebar() {
@@ -50,9 +52,9 @@ function Sidebar() {
         </div>
         <div>
           <h1 className="text-white font-bold text-sm leading-tight">
-            Admin École
+            SchoolTrack
           </h1>
-          <p className="text-indigo-300 text-xs">Système de présence</p>
+          <p className="text-indigo-300 text-xs">Tableau de bord admin</p>
         </div>
       </div>
 

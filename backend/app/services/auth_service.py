@@ -75,7 +75,22 @@ async def login_user(email: str, password: str) -> dict:
 
     token = create_access_token({"sub": user["id"], "role": user["role"]})
     user_response = {k: v for k, v in user.items() if k != "password_hash"}
-    return {"access_token": token, "token_type": "bearer", "user": user_response}
+
+    # Record login activity (fire-and-forget, don't fail login if this errors)
+    try:
+        from app.services.activity_service import record_activity
+        import asyncio
+        asyncio.create_task(record_activity(
+            user_id=user["id"],
+            user_email=user["email"],
+            user_role=user["role"],
+            action="login",
+            session_id=token[:36],  # first 36 chars of JWT as session id
+        ))
+    except Exception:
+        pass
+
+    return {"access_token": token, "token_type": "bearer", "user": user_response, "session_id": token[:36]}
 
 
 async def change_password(user_id: str, old_password: str, new_password: str) -> bool:

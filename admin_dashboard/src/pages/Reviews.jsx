@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getReviews, resolveReview, createConseilDiscipline } from '../services/reviewService';
+import { getReviews, resolveReview, unresolveReview, createConseilDiscipline } from '../services/reviewService';
 import { getStudents, getTeachers } from '../services/userService';
 import { getClasses } from '../services/classService';
 import LoadingSpinner from '../components/common/LoadingSpinner';
@@ -28,7 +28,7 @@ export default function Reviews() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('comments'); // 'comments' | 'conseil'
   const [statusFilter, setStatusFilter] = useState('all');
-  const [resolveTarget, setResolveTarget] = useState(null);
+  const [resolveTarget, setResolveTarget] = useState(null); // { review, action: 'resolve'|'unresolve' }
   const [resolving, setResolving] = useState(false);
   const [expanded, setExpanded] = useState({});
   const [showConseilModal, setShowConseilModal] = useState(false);
@@ -50,13 +50,14 @@ export default function Reviews() {
       .finally(() => setLoading(false));
   }, []);
 
-  const handleResolve = async () => {
+  const handleResolveToggle = async () => {
     setResolving(true);
+    const isResolving = resolveTarget.action === 'resolve';
     try {
-      await resolveReview(resolveTarget.id);
-      setReviews(prev => prev.map(r => r.id === resolveTarget.id ? { ...r, is_resolved: true } : r));
-      toast.success('Marqué comme résolu');
-    } catch { toast.error('Échec de la résolution'); }
+      await (isResolving ? resolveReview(resolveTarget.review.id) : unresolveReview(resolveTarget.review.id));
+      setReviews(prev => prev.map(r => r.id === resolveTarget.review.id ? { ...r, is_resolved: isResolving } : r));
+      toast.success(isResolving ? 'Marqué comme résolu' : 'Résolution annulée');
+    } catch { toast.error(isResolving ? 'Échec de la résolution' : 'Échec de l’annulation'); }
     finally { setResolving(false); setResolveTarget(null); }
   };
 
@@ -202,10 +203,19 @@ export default function Reviews() {
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
                         {r.is_resolved ? (
-                          <span className="text-xs bg-green-100 text-green-700 font-medium px-2 py-0.5 rounded-full">Résolu</span>
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-xs bg-green-100 text-green-700 font-medium px-2 py-0.5 rounded-full">Résolu</span>
+                            <button
+                              onClick={() => setResolveTarget({ review: r, action: 'unresolve' })}
+                              className="text-xs bg-gray-100 text-gray-600 font-medium px-2 py-0.5 rounded-lg hover:bg-gray-200 transition-colors"
+                              title="Annuler la résolution"
+                            >
+                              ↺ Rouvrir
+                            </button>
+                          </div>
                         ) : (
                           <button
-                            onClick={() => setResolveTarget(r)}
+                            onClick={() => setResolveTarget({ review: r, action: 'resolve' })}
                             className="text-xs bg-indigo-50 text-indigo-700 font-medium px-3 py-1 rounded-lg hover:bg-indigo-100 transition-colors"
                           >
                             Résoudre
@@ -304,10 +314,14 @@ export default function Reviews() {
 
       <ConfirmDialog
         isOpen={!!resolveTarget}
-        onClose={() => setResolveTarget(null)}
-        onConfirm={handleResolve}
-        title="Résoudre"
-        message={`Marquer "${resolveTarget?.title}" comme résolu ?`}
+        onCancel={() => setResolveTarget(null)}
+        onConfirm={handleResolveToggle}
+        title={resolveTarget?.action === 'resolve' ? 'Résoudre' : 'Rouvrir'}
+        message={
+          resolveTarget?.action === 'resolve'
+            ? `Marquer "${resolveTarget?.review?.title}" comme résolu ?`
+            : `Annuler la résolution de "${resolveTarget?.review?.title}" ?`
+        }
         confirmLabel={resolving ? 'Résolution...' : 'Marquer comme résolu'}
       />
     </div>

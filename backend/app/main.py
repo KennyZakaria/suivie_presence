@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from app.utils.firebase import initialize_firebase
-from app.routes import auth, users, classes, attendance, reviews, notifications, analytics, justifications
+from app.routes import auth, users, classes, attendance, reviews, notifications, analytics, justifications, activity
 import traceback
 
 app = FastAPI(
@@ -39,6 +39,7 @@ app.include_router(reviews.router, prefix=PREFIX)
 app.include_router(notifications.router, prefix=PREFIX)
 app.include_router(analytics.router, prefix=PREFIX)
 app.include_router(justifications.router, prefix=PREFIX)
+app.include_router(activity.router, prefix=PREFIX)
 
 
 @app.on_event("startup")

@@ -3,6 +3,8 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import '../models/user.dart';
 import '../services/auth_service.dart';
+import '../services/api_service.dart';
+import '../constants/api_constants.dart';
 import '../utils/secure_storage.dart';
 
 class AuthProvider extends ChangeNotifier {
@@ -75,6 +77,8 @@ class AuthProvider extends ChangeNotifier {
       _user = UserModel.fromJson(res['user']);
       await SecureStorage.saveToken(_token!);
       await SecureStorage.saveUser(jsonEncode(_user!.toJson()));
+      final sessionId = res['session_id'] as String?;
+      if (sessionId != null) await SecureStorage.saveSessionId(sessionId);
     } catch (e) {
       _error = e.toString();
       rethrow;
@@ -101,6 +105,14 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<void> logout() async {
+    // Notify backend to record logout duration
+    try {
+      final sessionId = await SecureStorage.getSessionId();
+      if (sessionId != null && _token != null) {
+        final api = ApiService();
+        await api.post(ApiConstants.logout, {'session_id': sessionId});
+      }
+    } catch (_) {}
     _user = null;
     _token = null;
     _error = null;

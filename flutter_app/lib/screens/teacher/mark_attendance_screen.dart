@@ -82,7 +82,7 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
       );
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Attendance saved successfully!'), backgroundColor: AppTheme.success, behavior: SnackBarBehavior.floating),
+        const SnackBar(content: Text('Présences enregistrées !'), backgroundColor: AppTheme.success, behavior: SnackBarBehavior.floating),
       );
       Navigator.pop(context, true);
     } catch (e) {
@@ -108,7 +108,7 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
         actions: [
           TextButton(
             onPressed: _setAllPresent,
-            child: const Text('All Present', style: TextStyle(color: AppTheme.primary, fontWeight: FontWeight.w600)),
+            child: const Text('Tous présents', style: TextStyle(color: AppTheme.primary, fontWeight: FontWeight.w600)),
           ),
         ],
       ),
@@ -138,11 +138,11 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
               const SizedBox(height: 12),
               // Summary counts
               Row(children: [
-                _CountChip(count: presentCount, label: 'Present', color: AppTheme.success),
+                _CountChip(count: presentCount, label: 'Présents', color: AppTheme.success),
                 const SizedBox(width: 8),
-                _CountChip(count: absentCount, label: 'Absent', color: AppTheme.error),
+                _CountChip(count: absentCount, label: 'Absents', color: AppTheme.error),
                 const SizedBox(width: 8),
-                _CountChip(count: lateCount, label: 'Late', color: AppTheme.warning),
+                _CountChip(count: lateCount, label: 'En retard', color: AppTheme.warning),
               ]),
             ]),
           ),
@@ -150,7 +150,7 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
           // Student list
           Expanded(
             child: widget.students.isEmpty
-                ? const Center(child: Text('No students in this class', style: TextStyle(color: AppTheme.textSecondary)))
+                ? const Center(child: Text('Aucun élève dans cette classe', style: TextStyle(color: AppTheme.textSecondary)))
                 : ListView.separated(
                     padding: const EdgeInsets.all(16),
                     itemCount: widget.students.length,

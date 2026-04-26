@@ -1,6 +1,6 @@
 {
-  "short_name": "School Admin",
-  "name": "School Attendance Management - Admin",
+  "short_name": "SchoolTrack",
+  "name": "SchoolTrack – Admin",
   "icons": [
     {
       "src": "favicon.ico",
