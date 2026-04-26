@@ -57,7 +57,7 @@ class _StudentAttendanceScreenState extends State<StudentAttendanceScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.background,
-      appBar: AppBar(title: const Text('My Attendance')),
+      appBar: AppBar(title: const Text('Mes présences')),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : RefreshIndicator(
@@ -130,7 +130,7 @@ class _StudentAttendanceScreenState extends State<StudentAttendanceScreen> {
                         Row(children: [
                           _StatChip(
                               count: _summary!.present,
-                              label: 'Present',
+                              label: 'Présent',
                               color: AppTheme.success),
                           const SizedBox(width: 8),
                           _StatChip(
@@ -140,11 +140,11 @@ class _StudentAttendanceScreenState extends State<StudentAttendanceScreen> {
                           const SizedBox(width: 8),
                           _StatChip(
                               count: _summary!.late,
-                              label: 'Late',
+                              label: 'En retard',
                               color: AppTheme.warning),
                         ]),
                         const SizedBox(height: 8),
-                        Text('${_summary!.total} total sessions recorded',
+                        Text('${_summary!.total} séances enregistrées',
                             style: const TextStyle(
                                 color: AppTheme.textSecondary, fontSize: 12)),
                       ]),
@@ -153,14 +153,14 @@ class _StudentAttendanceScreenState extends State<StudentAttendanceScreen> {
                   ],
 
                   // Records list
-                  const Text('Attendance History',
+                  const Text('Historique des présences',
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                   const SizedBox(height: 12),
                   if (_records.isEmpty)
                     const EmptyState(
                         icon: Icons.assignment_outlined,
-                        message: 'No attendance records yet')
+                        message: 'Aucun enregistrement de présence')
                   else
                     ...(_records.map((r) {
                       final justification =

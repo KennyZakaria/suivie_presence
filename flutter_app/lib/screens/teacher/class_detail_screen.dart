@@ -89,8 +89,8 @@ class _ClassDetailScreenState extends State<ClassDetailScreen>
           unselectedLabelColor: AppTheme.textSecondary,
           indicatorColor: AppTheme.primary,
           tabs: [
-            Tab(text: 'Students (${_students.length})'),
-            const Tab(text: 'Attendance'),
+            Tab(text: 'Élèves (${_students.length})'),
+            const Tab(text: 'Présences'),
           ],
         ),
       ),
@@ -105,7 +105,7 @@ class _ClassDetailScreenState extends State<ClassDetailScreen>
         },
         backgroundColor: AppTheme.primary,
         icon: const Icon(Icons.edit_note_rounded, color: Colors.white),
-        label: const Text('Mark Attendance',
+        label: const Text('Marquer les présences',
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
       ),
       body: TabBarView(
@@ -117,7 +117,7 @@ class _ClassDetailScreenState extends State<ClassDetailScreen>
               : _students.isEmpty
                   ? const EmptyState(
                       icon: Icons.people_outline,
-                      message: 'No students in this class')
+                      message: 'Aucun élève dans cette classe')
                   : ListView.separated(
                       padding: const EdgeInsets.all(16),
                       itemCount: _students.length,
@@ -176,7 +176,7 @@ class _ClassDetailScreenState extends State<ClassDetailScreen>
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: Row(children: [
-                  const Text('Date:',
+                  const Text('Date :',
                       style: TextStyle(fontWeight: FontWeight.w500)),
                   const SizedBox(width: 12),
                   Expanded(
@@ -220,7 +220,7 @@ class _ClassDetailScreenState extends State<ClassDetailScreen>
                     : _attendance.isEmpty
                         ? const EmptyState(
                             icon: Icons.assignment_outlined,
-                            message: 'No attendance for this date')
+                            message: 'Aucune présence pour cette date')
                         : ListView.separated(
                             padding: const EdgeInsets.all(16),
                             itemCount: _attendance.length,

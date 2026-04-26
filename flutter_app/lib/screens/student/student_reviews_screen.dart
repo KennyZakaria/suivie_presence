@@ -40,7 +40,7 @@ class _StudentReviewsScreenState extends State<StudentReviewsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.background,
-      appBar: AppBar(title: const Text('My Reviews')),
+      appBar: AppBar(title: const Text('Mes avis')),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : RefreshIndicator(
@@ -51,7 +51,7 @@ class _StudentReviewsScreenState extends State<StudentReviewsScreen> {
                         SliverFillRemaining(
                           child: EmptyState(
                             icon: Icons.check_circle_outline,
-                            message: 'No disciplinary reviews',
+                            message: 'Aucun avis disciplinaire',
                           ),
                         ),
                       ],
@@ -148,7 +148,7 @@ class _StudentReviewsScreenState extends State<StudentReviewsScreen> {
                                                       const Color(0xFFDCFCE7),
                                                   borderRadius:
                                                       BorderRadius.circular(6)),
-                                              child: const Text('Resolved',
+                                              child: const Text('Résolu',
                                                   style: TextStyle(
                                                       fontSize: 10,
                                                       fontWeight:

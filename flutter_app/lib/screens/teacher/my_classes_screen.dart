@@ -45,9 +45,9 @@ class _MyClassesScreenState extends State<MyClassesScreen> {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Hello, ${teacher?.fullName.split(' ').first ?? ''}!',
+            Text('Bonjour, ${teacher?.fullName.split(' ').first ?? ''} !',
                 style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            const Text('My Classes', style: TextStyle(fontSize: 13, color: AppTheme.textSecondary)),
+            const Text('Mes classes', style: TextStyle(fontSize: 13, color: AppTheme.textSecondary)),
           ],
         ),
       ),
@@ -58,7 +58,7 @@ class _MyClassesScreenState extends State<MyClassesScreen> {
             : _error != null
                 ? Center(child: Text(_error!, style: const TextStyle(color: AppTheme.error)))
                 : _classes.isEmpty
-                    ? const EmptyState(icon: Icons.class_outlined, message: 'No classes assigned yet')
+                    ? const EmptyState(icon: Icons.class_outlined, message: 'Aucune classe assignée')
                     : ListView.separated(
                         padding: const EdgeInsets.all(16),
                         itemCount: _classes.length,
@@ -114,11 +114,11 @@ class _ClassCard extends StatelessWidget {
                     Row(children: [
                       Icon(Icons.people_outline, size: 14, color: color),
                       const SizedBox(width: 4),
-                      Text('${cls.studentCount} students', style: TextStyle(color: color, fontSize: 12, fontWeight: FontWeight.w500)),
+                      Text('${cls.studentCount} élèves', style: TextStyle(color: color, fontSize: 12, fontWeight: FontWeight.w500)),
                       const SizedBox(width: 12),
                       Icon(Icons.grade_outlined, size: 14, color: AppTheme.textSecondary),
                       const SizedBox(width: 4),
-                      Text('Grade ${cls.grade}', style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
+                      Text('Niveau ${cls.grade}', style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
                     ]),
                   ],
                 ),

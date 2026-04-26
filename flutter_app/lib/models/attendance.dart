@@ -17,11 +17,11 @@ extension AttendanceStatusExt on AttendanceStatus {
   String get label {
     switch (this) {
       case AttendanceStatus.present:
-        return 'Present';
+        return 'Présent';
       case AttendanceStatus.absent:
         return 'Absent';
       case AttendanceStatus.late:
-        return 'Late';
+        return 'En retard';
     }
   }
 

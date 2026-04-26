@@ -128,7 +128,7 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text('Attendance Overview',
+                          const Text('Aperçu des présences',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 15)),
                           const SizedBox(height: 16),
@@ -163,7 +163,7 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
                                 child: Column(children: [
                               _LegendItem(
                                   color: AppTheme.success,
-                                  label: 'Present',
+                                  label: 'Présent',
                                   count: _summary!.present,
                                   pct: _summary!.presentPercentage),
                               const SizedBox(height: 8),
@@ -175,7 +175,7 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
                               const SizedBox(height: 8),
                               _LegendItem(
                                   color: AppTheme.warning,
-                                  label: 'Late',
+                                  label: 'En retard',
                                   count: _summary!.late,
                                   pct: _summary!.latePercentage),
                             ])),
@@ -218,7 +218,7 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
                       children: [
                         const Padding(
                           padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
-                          child: Text('Recent Attendance',
+                          child: Text('Présences récentes',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 15)),
                         ),
@@ -226,7 +226,7 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
                           const Padding(
                             padding: EdgeInsets.all(24),
                             child: Center(
-                                child: Text('No records yet',
+                                child: Text('Aucun enregistrement',
                                     style: TextStyle(
                                         color: AppTheme.textSecondary))),
                           )

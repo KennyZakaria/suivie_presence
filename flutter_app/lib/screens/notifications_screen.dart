@@ -30,7 +30,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             builder: (_, p, __) => p.unreadCount > 0
                 ? TextButton(
                     onPressed: p.markAllRead,
-                    child: const Text('Mark all read',
+                    child: const Text('Tout marquer comme lu',
                         style:
                             TextStyle(color: AppTheme.primary, fontSize: 13)),
                   )
@@ -54,7 +54,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                             Icon(Icons.notifications_none_rounded,
                                 size: 64, color: Colors.grey.shade300),
                             const SizedBox(height: 12),
-                            const Text('No notifications yet',
+                            const Text('Aucune notification',
                                 style:
                                     TextStyle(color: AppTheme.textSecondary)),
                           ]),

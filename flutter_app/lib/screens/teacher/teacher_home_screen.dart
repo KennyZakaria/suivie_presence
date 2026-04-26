@@ -39,7 +39,7 @@ class _TeacherHomeScreenState extends State<TeacherHomeScreen> {
           currentIndex: _currentIndex,
           onTap: (i) => setState(() => _currentIndex = i),
           items: [
-            const BottomNavigationBarItem(icon: Icon(Icons.class_outlined), activeIcon: Icon(Icons.class_rounded), label: 'Classes'),
+            const BottomNavigationBarItem(icon: Icon(Icons.class_outlined), activeIcon: Icon(Icons.class_rounded), label: 'Mes classes'),
             BottomNavigationBarItem(
               icon: Stack(clipBehavior: Clip.none, children: [
                 const Icon(Icons.notifications_outlined),
@@ -53,7 +53,7 @@ class _TeacherHomeScreenState extends State<TeacherHomeScreen> {
               activeIcon: const Icon(Icons.notifications_rounded),
               label: 'Notifications',
             ),
-            const BottomNavigationBarItem(icon: Icon(Icons.person_outline), activeIcon: Icon(Icons.person_rounded), label: 'Profile'),
+            const BottomNavigationBarItem(icon: Icon(Icons.person_outline), activeIcon: Icon(Icons.person_rounded), label: 'Profil'),
           ],
         ),
       ),

@@ -46,9 +46,9 @@ String capitalize(String s) =>
 
 String attendanceRateLabel(double rate) {
   if (rate >= 85) return 'Excellent';
-  if (rate >= 70) return 'Good';
-  if (rate >= 50) return 'At Risk';
-  return 'Critical';
+  if (rate >= 70) return 'Bien';
+  if (rate >= 50) return 'À risque';
+  return 'Critique';
 }
 
 Color attendanceRateColor(double rate) {
