@@ -24,7 +24,12 @@ def initialize_firebase():
         cred_dict = json.loads(firebase_json)
         cred = credentials.Certificate(cred_dict)
 
-        firebase_admin.initialize_app(cred)
+        project_id = cred_dict.get("project_id", "")
+        storage_bucket = os.environ.get("FIREBASE_STORAGE_BUCKET") or f"{project_id}.appspot.com"
+
+        firebase_admin.initialize_app(cred, {
+            "storageBucket": storage_bucket,
+        })
 
     _db = firestore.client()
     
