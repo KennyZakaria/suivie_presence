@@ -25,7 +25,7 @@ def initialize_firebase():
         cred = credentials.Certificate(cred_dict)
 
         project_id = cred_dict.get("project_id", "")
-        storage_bucket = os.environ.get("FIREBASE_STORAGE_BUCKET") or f"{project_id}.appspot.com"
+        storage_bucket = os.environ.get("FIREBASE_STORAGE_BUCKET") or f"{project_id}.firebasestorage.app"
 
         firebase_admin.initialize_app(cred, {
             "storageBucket": storage_bucket,
