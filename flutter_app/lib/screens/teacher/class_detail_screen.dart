@@ -49,7 +49,10 @@ class _ClassDetailScreenState extends State<ClassDetailScreen>
   }
 
   Future<void> _loadStudents() async {
-    setState(() { _loadingStudents = true; _studentsError = null; });
+    setState(() {
+      _loadingStudents = true;
+      _studentsError = null;
+    });
     try {
       _students = await _classService.getClassStudents(widget.classModel.id);
     } catch (e) {
@@ -122,14 +125,15 @@ class _ClassDetailScreenState extends State<ClassDetailScreen>
                   ? Center(
                       child: Padding(
                         padding: const EdgeInsets.all(24),
-                        child: Column(mainAxisSize: MainAxisSize.min, children: [
+                        child:
+                            Column(mainAxisSize: MainAxisSize.min, children: [
                           const Icon(Icons.error_outline,
                               color: AppTheme.error, size: 48),
                           const SizedBox(height: 12),
                           Text(_studentsError!,
                               textAlign: TextAlign.center,
-                              style:
-                                  const TextStyle(color: AppTheme.textSecondary)),
+                              style: const TextStyle(
+                                  color: AppTheme.textSecondary)),
                           const SizedBox(height: 16),
                           ElevatedButton.icon(
                             onPressed: _loadStudents,
@@ -140,58 +144,60 @@ class _ClassDetailScreenState extends State<ClassDetailScreen>
                       ),
                     )
                   : _students.isEmpty
-                  ? const EmptyState(
-                      icon: Icons.people_outline,
-                      message: 'Aucun élève dans cette classe')
-                  : ListView.separated(
-                      padding: const EdgeInsets.all(16),
-                      itemCount: _students.length,
-                      separatorBuilder: (_, __) => const SizedBox(height: 8),
-                      itemBuilder: (_, i) {
-                        final s = _students[i];
-                        return Material(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(12),
-                            onTap: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => StudentProfileScreen(
-                                        student: s, classId: cls.id))),
-                            child: Padding(
-                              padding: const EdgeInsets.all(14),
-                              child: Row(children: [
-                                CircleAvatar(
-                                  backgroundColor: AppTheme.primaryLight,
-                                  child: Text(s.initials,
-                                      style: const TextStyle(
-                                          color: AppTheme.primary,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 13)),
+                      ? const EmptyState(
+                          icon: Icons.people_outline,
+                          message: 'Aucun élève dans cette classe')
+                      : ListView.separated(
+                          padding: const EdgeInsets.all(16),
+                          itemCount: _students.length,
+                          separatorBuilder: (_, __) =>
+                              const SizedBox(height: 8),
+                          itemBuilder: (_, i) {
+                            final s = _students[i];
+                            return Material(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12),
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(12),
+                                onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => StudentProfileScreen(
+                                            student: s, classId: cls.id))),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(14),
+                                  child: Row(children: [
+                                    CircleAvatar(
+                                      backgroundColor: AppTheme.primaryLight,
+                                      child: Text(s.initials,
+                                          style: const TextStyle(
+                                              color: AppTheme.primary,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 13)),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                        child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(s.fullName,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w600)),
+                                        Text(s.email,
+                                            style: const TextStyle(
+                                                color: AppTheme.textSecondary,
+                                                fontSize: 12)),
+                                      ],
+                                    )),
+                                    const Icon(Icons.chevron_right_rounded,
+                                        color: AppTheme.textSecondary),
+                                  ]),
                                 ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                    child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(s.fullName,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w600)),
-                                    Text(s.email,
-                                        style: const TextStyle(
-                                            color: AppTheme.textSecondary,
-                                            fontSize: 12)),
-                                  ],
-                                )),
-                                const Icon(Icons.chevron_right_rounded,
-                                    color: AppTheme.textSecondary),
-                              ]),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+                              ),
+                            );
+                          },
+                        ),
 
           // Attendance Tab
           Column(
