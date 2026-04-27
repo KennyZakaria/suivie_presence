@@ -25,6 +25,7 @@ class _ClassDetailScreenState extends State<ClassDetailScreen>
   List<AttendanceRecord> _attendance = [];
   bool _loadingStudents = true;
   bool _loadingAtt = false;
+  String? _studentsError;
   String _dateFilter = todayString();
 
   final _classService = ClassService();
@@ -48,16 +49,19 @@ class _ClassDetailScreenState extends State<ClassDetailScreen>
   }
 
   Future<void> _loadStudents() async {
-    setState(() => _loadingStudents = true);
+    setState(() { _loadingStudents = true; _studentsError = null; });
     try {
       _students = await _classService.getClassStudents(widget.classModel.id);
-    } catch (_) {
+    } catch (e) {
+      if (mounted) setState(() => _studentsError = e.toString());
     } finally {
       if (mounted) setState(() => _loadingStudents = false);
     }
   }
 
   Future<void> _loadAttendance() async {
+    // Ensure students are loaded first so names resolve correctly
+    if (_students.isEmpty && !_loadingStudents) await _loadStudents();
     setState(() => _loadingAtt = true);
     try {
       _attendance = await _attService.getClassAttendance(
@@ -114,7 +118,28 @@ class _ClassDetailScreenState extends State<ClassDetailScreen>
           // Students Tab
           _loadingStudents
               ? const Center(child: CircularProgressIndicator())
-              : _students.isEmpty
+              : _studentsError != null
+                  ? Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(24),
+                        child: Column(mainAxisSize: MainAxisSize.min, children: [
+                          const Icon(Icons.error_outline,
+                              color: AppTheme.error, size: 48),
+                          const SizedBox(height: 12),
+                          Text(_studentsError!,
+                              textAlign: TextAlign.center,
+                              style:
+                                  const TextStyle(color: AppTheme.textSecondary)),
+                          const SizedBox(height: 16),
+                          ElevatedButton.icon(
+                            onPressed: _loadStudents,
+                            icon: const Icon(Icons.refresh),
+                            label: const Text('Réessayer'),
+                          ),
+                        ]),
+                      ),
+                    )
+                  : _students.isEmpty
                   ? const EmptyState(
                       icon: Icons.people_outline,
                       message: 'Aucun élève dans cette classe')
