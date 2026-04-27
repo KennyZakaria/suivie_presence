@@ -85,6 +85,7 @@ async def create_student(data: dict) -> dict:
         "class_ids": [],
         "is_active": True,
         "must_change_password": True,
+        "terms_accepted": False,
         "fcm_token": None,
         "created_at": now,
         "updated_at": now,
@@ -160,3 +161,11 @@ async def reset_user_password(user_id: str) -> dict:
         "updated_at": datetime.utcnow().isoformat(),
     })
     return {"temp_password": temp_password, "message": "Password reset successfully"}
+
+
+async def accept_terms(user_id: str) -> None:
+    db = get_db()
+    db.collection("users").document(user_id).update({
+        "terms_accepted": True,
+        "updated_at": datetime.utcnow().isoformat(),
+    })

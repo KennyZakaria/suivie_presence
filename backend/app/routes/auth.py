@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from app.services.auth_service import login_user, change_password, force_change_password
-from app.services.user_service import update_fcm_token
+from app.services.user_service import update_fcm_token, accept_terms
 from app.services.activity_service import record_logout
 from app.middleware.auth import get_current_user
 
@@ -71,3 +71,9 @@ async def update_fcm(
 ):
     await update_fcm_token(current_user["id"], data.fcm_token)
     return {"message": "FCM token updated"}
+
+
+@router.post("/accept-terms")
+async def accept_terms_endpoint(current_user: dict = Depends(get_current_user)):
+    await accept_terms(current_user["id"])
+    return {"message": "Terms accepted"}

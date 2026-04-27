@@ -8,6 +8,7 @@ class UserModel {
   final List<String> classIds;
   final bool isActive;
   final bool mustChangePassword;
+  final bool termsAccepted;
   final String? fcmToken;
   final String? createdAt;
 
@@ -21,6 +22,7 @@ class UserModel {
     this.classIds = const [],
     this.isActive = true,
     this.mustChangePassword = false,
+    this.termsAccepted = false,
     this.fcmToken,
     this.createdAt,
   });
@@ -35,6 +37,7 @@ class UserModel {
         classIds: List<String>.from(json['class_ids'] ?? []),
         isActive: json['is_active'] ?? true,
         mustChangePassword: json['must_change_password'] ?? false,
+        termsAccepted: json['terms_accepted'] ?? false,
         fcmToken: json['fcm_token'],
         createdAt: json['created_at'],
       );
@@ -49,6 +52,7 @@ class UserModel {
         'class_ids': classIds,
         'is_active': isActive,
         'must_change_password': mustChangePassword,
+        'terms_accepted': termsAccepted,
         'fcm_token': fcmToken,
         'created_at': createdAt,
       };
@@ -56,7 +60,7 @@ class UserModel {
   UserModel copyWith({
     String? id, String? email, String? fullName, String? role,
     String? phone, String? profileImageUrl, List<String>? classIds,
-    bool? isActive, bool? mustChangePassword, String? fcmToken,
+    bool? isActive, bool? mustChangePassword, bool? termsAccepted, String? fcmToken,
   }) =>
       UserModel(
         id: id ?? this.id,
@@ -68,6 +72,7 @@ class UserModel {
         classIds: classIds ?? this.classIds,
         isActive: isActive ?? this.isActive,
         mustChangePassword: mustChangePassword ?? this.mustChangePassword,
+        termsAccepted: termsAccepted ?? this.termsAccepted,
         fcmToken: fcmToken ?? this.fcmToken,
         createdAt: createdAt,
       );

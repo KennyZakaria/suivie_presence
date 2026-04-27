@@ -39,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
       } else if (user.isTeacher) {
         Navigator.pushReplacementNamed(context, '/teacher-home');
       } else if (user.isStudent) {
-        final accepted = await SecureStorage.hasAcceptedTerms(user.id);
+        final accepted = user.termsAccepted || await SecureStorage.hasAcceptedTerms(user.id);
         if (!mounted) return;
         if (!accepted) {
           Navigator.pushReplacement(

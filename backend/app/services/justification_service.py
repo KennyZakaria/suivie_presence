@@ -47,13 +47,17 @@ async def create_justification(
         if len(content) > MAX_FILE_SIZE:
             raise HTTPException(status_code=400, detail="File too large. Maximum 5 MB.")
 
-        ext = file.filename.rsplit(".", 1)[-1] if file.filename and "." in file.filename else "bin"
-        blob_name = f"justifications/{student_id}/{uuid.uuid4().hex}.{ext}"
-        bucket = storage.bucket()
-        blob = bucket.blob(blob_name)
-        blob.upload_from_string(content, content_type=file.content_type)
-        blob.make_public()
-        document_url = blob.public_url
+        try:
+            ext = file.filename.rsplit(".", 1)[-1] if file.filename and "." in file.filename else "bin"
+            blob_name = f"justifications/{student_id}/{uuid.uuid4().hex}.{ext}"
+            bucket = storage.bucket()
+            blob = bucket.blob(blob_name)
+            blob.upload_from_string(content, content_type=file.content_type)
+            blob.make_public()
+            document_url = blob.public_url
+        except Exception:
+            # Storage not configured yet — justification is saved without document
+            document_url = None
 
     now = datetime.utcnow().isoformat()
     justification_id = str(uuid.uuid4())

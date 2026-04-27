@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../constants/api_constants.dart';
 import '../../constants/app_theme.dart';
+import '../../services/api_service.dart';
 import '../../utils/secure_storage.dart';
 
 class TermsAcceptanceScreen extends StatefulWidget {
@@ -38,6 +40,9 @@ class _TermsAcceptanceScreenState extends State<TermsAcceptanceScreen> {
   }
 
   Future<void> _acceptTerms() async {
+    try {
+      await ApiService().post(ApiConstants.acceptTerms, {});
+    } catch (_) {}
     await SecureStorage.setTermsAccepted(widget.userId);
     if (!mounted) return;
     Navigator.pushReplacementNamed(context, '/student-home');

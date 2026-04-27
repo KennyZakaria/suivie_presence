@@ -73,7 +73,7 @@ class _SplashRouterState extends State<_SplashRouter> {
       Navigator.pushReplacementNamed(context, '/teacher-home');
     } else {
       // Student: check if terms are accepted
-      final accepted = await SecureStorage.hasAcceptedTerms(auth.user!.id);
+      final accepted = auth.user!.termsAccepted || await SecureStorage.hasAcceptedTerms(auth.user!.id);
       if (!mounted) return;
       if (!accepted) {
         Navigator.pushReplacement(

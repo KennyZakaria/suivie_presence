@@ -12,6 +12,7 @@ class ApiConstants {
   static const String changePassword = '/auth/change-password';
   static const String forceChangePassword = '/auth/force-change-password';
   static const String fcmToken = '/auth/fcm-token';
+  static const String acceptTerms = '/auth/accept-terms';
 
   // Classes
   static const String classes = '/classes';

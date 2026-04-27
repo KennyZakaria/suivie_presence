@@ -34,6 +34,7 @@ class UserResponse(UserBase):
     class_ids: List[str] = []
     is_active: bool = True
     must_change_password: bool = False
+    terms_accepted: bool = False
     created_at: Optional[str] = None
 
     class Config:
