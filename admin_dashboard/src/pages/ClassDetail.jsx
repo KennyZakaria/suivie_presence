@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getClass, removeStudentFromClass } from '../services/classService';
+import { getClass, getClassStudents, removeStudentFromClass } from '../services/classService';
 import { getTeachers } from '../services/userService';
 import { getClassAttendance } from '../services/attendanceService';
 import LoadingSpinner from '../components/common/LoadingSpinner';
@@ -21,10 +21,10 @@ export default function ClassDetail() {
   const [loadingAtt, setLoadingAtt] = useState(false);
 
   useEffect(() => {
-    Promise.all([getClass(id), getTeachers()])
-      .then(([data, t]) => {
+    Promise.all([getClass(id), getClassStudents(id), getTeachers()])
+      .then(([data, classStudents, t]) => {
         setCls(data);
-        setStudents(data.students || []);
+        setStudents(classStudents || []);
         setTeachers(t);
       })
       .catch(() => toast.error('Échec du chargement de la classe'))
@@ -49,6 +49,10 @@ export default function ClassDetail() {
     try {
       await removeStudentFromClass(id, sid);
       setStudents(prev => prev.filter(s => s.id !== sid));
+      setCls(prev => (prev ? {
+        ...prev,
+        student_ids: (prev.student_ids || []).filter(studentId => studentId !== sid),
+      } : prev));
       toast.success('Étudiant retiré de la classe');
     } catch { toast.error('Échec du retrait de l\'étudiant'); }
     setConfirmRemove(null);
@@ -58,7 +62,7 @@ export default function ClassDetail() {
   if (!cls) return <div className="text-center py-16 text-gray-400">Classe non trouvée</div>;
 
   const getTeacherName = (tid) => teachers.find(t => t.id === tid)?.full_name || 'Non assigné';
-  const getStudentName = (sid) => students.find(s => s.id === sid)?.full_name || sid;
+  const getStudentName = (sid) => students.find(s => s.id === sid)?.full_name || 'Étudiant inconnu';
   const statusCount = (status) => attendance.filter(a => a.status === status).length;
 
   return (
